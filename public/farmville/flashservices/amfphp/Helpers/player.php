@@ -20,9 +20,9 @@ class Player {
     }
 
     public function getData($requ) {
-        $query = "SELECT * FROM usermeta WHERE uid = '" . $this->uid ."'";
-
         $conn = $this->db->getDb();
+
+        $query = "SELECT * FROM usermeta WHERE uid = '" . $this->uid ."'";
 
         $result = $conn->query($query);
 
