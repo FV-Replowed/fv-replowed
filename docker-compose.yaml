@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+    
+    # Application
+    fv-replowed:
+        image: kehayeah/fv-replowed:latest
+        working_dir: /var/www/html
+        volumes:
+            - fv-replowed:/var/www/html
+        ports:
+            - "8000:80"
+        depends_on:
+            - "database"
+    # Database
+    database:
+        image: mysql:8.0
+        volumes:
+            - dbdata:/var/lib/mysql
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_USER: ${DB_USERNAME}
+        ports:
+            - "33061:3306"
+    # Database management
+    pma:
+        image: phpmyadmin:5.1
+        environment:
+            - PMA_ARBITRARY=1
+            - PMA_HOST=${DB_HOST}
+            - PMA_USER=${DB_USERNAME}
+            - PMA_PASSWORD=${DB_PASSWORD}
+            - PMA_PORT=${DB_PORT}
+        depends_on:
+            - database
+        ports:
+            - 8888:80
+volumes:
+    dbdata:
+    fv-replowed:
