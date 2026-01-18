@@ -10,17 +10,17 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     @if (is_dir(public_path('farmville/assets/hashed/assets')))
-                        <h2>Assets exist, Go to the Play tab and enjoy</h2>
+                        <h2>Assets exist. Go to the "Play" tab and enjoy!</h2>
                     @else
                         <h2>Assets don't exist.</h2>
-                        <p>We need to a routine that downloads all necessary files for the game to work.</p>
+                        <p>We need to do a routine that downloads all necessary files for the game to work.</p>
                         <p>It's up to you to decide when, but you need to do it.</p>
-                        <p>Click the button below to start the process and do not close/interrupt the server while it's doing its thing</p>
+                        <p>Click the button below to start the process, and do not close or interrupt the server while it's doing its thing.</p>
                         <br>
                         <p>What will be done:</p>
                         <ul>
-                            <li>The game's files will be downloaded from the Internet Archive</li>
-                            <li>The files will be extracted to the /public/farmville/assets folder</li>
+                            <li>The game's files will be downloaded from the Internet Archive.</li>
+                            <li>The files will be extracted to the public/farmville/assets folder.</li>
                         </ul>
                         <br>
                         <button id="download-btn" class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">{{ __('Download Assets') }}</button>
