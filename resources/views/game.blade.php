@@ -3543,7 +3543,7 @@
                             }
                         </style>
 
-                        <img src="img/logo.jpg" style="width: 250px;" />
+                        <img src="img/logo.png" style="width: 250px;" />
                         <div>
                             <!-- SESSION HEADER -->
                             <div id="header" style="width: 850px; margin-top: 50px;">
