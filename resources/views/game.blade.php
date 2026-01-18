@@ -2994,7 +2994,7 @@
                                         // Show badge on Add Neighbors button
                                         const addNeighborBtn = document.querySelector('a[title="Add Neighbors"]');
                                         if (addNeighborBtn) {
-                                            addNeighborBtn.innerHTML += `<span style="position: absolute; top: 5px; right: 5px; background-color: #E74C3C; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;">${data.count}</span>`;
+                                            addNeighborBtn.innerHTML += `<span style="position: absolute; top: 5px; right: 5px; background-color: #E74C3C; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;" id="notificationBadge">${data.count}</span>`;
                                             addNeighborBtn.style.position = 'relative';
                                         }
                                     }
@@ -3370,9 +3370,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Notification Badge -->
-                        <div style="color:white;font-size:11px;font-weight:normal;left:3px;position:absolute;right:4px;text-align:center;top:4px;width:20px;display:block;margin: 0px; padding: 0px;" id="notificationBadge">0</div>
 
                         <style>
                             .neighbor-item {
