@@ -88,7 +88,7 @@ class NeighborController extends Controller
         $neighborExists = DB::table('users')->where('uid', $neighborId)->exists();
         
         if (!$neighborExists) {
-            return response()->json(['error' => 'Vizinho não encontrado'], 404);
+            return response()->json(['error' => 'Neighbor not found'], 404);
         }
         
         // Fetch current neighbors
@@ -123,7 +123,7 @@ class NeighborController extends Controller
             }
         }
         
-        return response()->json(['success' => true, 'message' => 'Vizinho adicionado com sucesso']);
+        return response()->json(['success' => true, 'message' => 'Neighbor added successfully']);
     }
     
     public function removeNeighbor(Request $request)
@@ -158,7 +158,7 @@ class NeighborController extends Controller
                 ->update(['meta_value' => serialize($neighborIds)]);
         }
 
-        return response()->json(['success' => true, 'message' => 'Vizinho removido com sucesso']);
+        return response()->json(['success' => true, 'message' => 'Neighbor removed successfully']);
     }
     
     public function getPotentialNeighbors()
@@ -360,7 +360,7 @@ class NeighborController extends Controller
             }
         }
         
-        return response()->json(['success' => true, 'message' => 'Vizinho aceito com sucesso']);
+        return response()->json(['success' => true, 'message' => 'Neighbor request accepted successfully']);
     }
 
     public function rejectNeighbor(Request $request)
@@ -395,7 +395,7 @@ class NeighborController extends Controller
                 ->update(['meta_value' => serialize($pendingIds)]);
         }
 
-        return response()->json(['success' => true, 'message' => 'Solicitação rejeitada']);
+        return response()->json(['success' => true, 'message' => 'Neighbor request rejected successfully']);
     }
 
     public function sendNeighborRequest(Request $request)
@@ -407,7 +407,7 @@ class NeighborController extends Controller
         $neighborExists = DB::table('users')->where('uid', $neighborId)->exists();
         
         if (!$neighborExists) {
-            return response()->json(['error' => 'Usuário não encontrado'], 404);
+            return response()->json(['error' => 'User not found'], 404);
         }
         
         // Add to recipient's pending list
@@ -440,6 +440,6 @@ class NeighborController extends Controller
             }
         }
         
-        return response()->json(['success' => true, 'message' => 'Solicitação enviada com sucesso']);
+        return response()->json(['success' => true, 'message' => 'Neighbor request sent successfully']);
     }
 }

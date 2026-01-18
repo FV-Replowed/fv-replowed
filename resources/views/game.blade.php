@@ -2777,8 +2777,8 @@
                                     }
                                 })
                                 .catch(error => {
-                                    console.error('Error loading requests:', error);
-                                    document.getElementById('pendingList').innerHTML = '<p style="text-align: center; color: #E74C3C;">❌ Error loading requests</p>';
+                                    console.error('Error loading neighbor requests:', error);
+                                    document.getElementById('pendingList').innerHTML = '<p style="text-align: center; color: #E74C3C;">❌ Error loading neighbor requests</p>';
                                 });
                         }
 
@@ -2794,7 +2794,7 @@
                                     currentCount.textContent = neighbors.length;
                                     
                                     if (neighbors.length === 0) {
-                                        currentList.innerHTML = '<p style="text-align: center; color: #7F8C8D; padding: 20px; font-style: italic;">👥 You dont have neighbors yet</p>';
+                                        currentList.innerHTML = '<p style="text-align: center; color: #7F8C8D; padding: 20px; font-style: italic;">👥 You don\'t have neighbors yet</p>';
                                     } else {
                                         currentList.innerHTML = neighbors.map(neighbor => {
                                             const initial = neighbor.first_name.charAt(0).toUpperCase();
@@ -2899,13 +2899,13 @@
                             })
                             .catch(error => {
                                 console.error('Error:', error);
-                                alert('❌ Error processing request');
+                                alert('❌ Error processing neighbor request');
                             });
                         }
 
                         // Reject neighbor
                         function rejectNeighbor(neighborId) {
-                            if (!confirm('Do you want to reject this request?')) return;
+                            if (!confirm('Do you want to reject this neighbor request?')) return;
                             
                             fetch('/neighbors/reject', {
                                 method: 'POST',
@@ -2921,12 +2921,12 @@
                                     alert('✅ ' + data.message);
                                     loadPendingRequests();
                                 } else {
-                                    alert('❌ Error rejecting request');
+                                    alert('❌ Error rejecting neighbor request');
                                 }
                             })
                             .catch(error => {
                                 console.error('Error:', error);
-                                alert('❌ Error processing request');
+                                alert('❌ Error processing neighbor request');
                             });
                         }
 
@@ -2955,13 +2955,13 @@
                             })
                             .catch(error => {
                                 console.error('Error:', error);
-                                alert('❌ Error processing request');
+                                alert('❌ Error processing neighbor request');
                             });
                         }
 
                         // Send request
                         function sendNeighborRequest(neighborId) {
-                            if (!confirm('Do you want to send neighbor request?')) return;
+                            if (!confirm('Do you want to send this neighbor request?')) return;
                             
                             fetch('/neighbors/send-request', {
                                 method: 'POST',
@@ -2976,12 +2976,12 @@
                                 if (data.success) {
                                     alert('✅ ' + data.message);
                                 } else {
-                                    alert('❌ ' + (data.error || 'Error sending request'));
+                                    alert('❌ ' + (data.error || 'Error sending neighbor request'));
                                 }
                             })
                             .catch(error => {
                                 console.error('Error:', error);
-                                alert('❌ Error sending request');
+                                alert('❌ Error sending neighbor request');
                             });
                         }
 
@@ -3361,7 +3361,7 @@
                                     <!-- Find Neighbors Tab -->
                                     <div id="findContent" class="tab-content" style="display: none;">
                                         <div style="margin-bottom: 15px;">
-                                            <input type="text" id="searchNeighbor" placeholder="Buscar por nome ou ID..." style="width: 100%; padding: 10px; border: 2px solid #7FB3D5; border-radius: 5px; font-size: 14px; box-sizing: border-box;" onkeyup="filterPotentialNeighbors()">
+                                            <input type="text" id="searchNeighbor" placeholder="Search by name or ID..." style="width: 100%; padding: 10px; border: 2px solid #7FB3D5; border-radius: 5px; font-size: 14px; box-sizing: border-box;" onkeyup="filterPotentialNeighbors()">
                                         </div>
                                         <div id="findList" style="display: flex; flex-direction: column; gap: 10px;">
                                             <p style="text-align: center; color: #7F8C8D; font-style: italic;">Loading users...</p>
