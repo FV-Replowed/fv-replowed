@@ -58,27 +58,22 @@ class MarketTransactions {
         }
     }
 
+    // TODO: add cash support
     public function buyItem(object $data){
         global $db;
         
         $res = getItemByName($data->itemName, "db");
-        $conn = $db->getDb();
-        if ($res && $res["cost"]){
-            //Calc xp gain
-            $buyXp = 0;
-            if ($res['plantXp']){
-                $buyXp = $res['plantXp'];
-            }else{
-                $buyXp = $res['cost'] * 0.01;
-            }
-            $query = "UPDATE usermeta SET `gold` = gold - " . $res["cost"] . ", xp = xp + ".$buyXp." WHERE uid = '". $this->uid. "'";
-            $conn->query($query);
-        }elseif ($res && $res["cash"]){
-            $buyXp = $res['cash'] * 100;
-            $query = "UPDATE usermeta SET `gold` = gold - " . $res["cost"] . ", xp = xp + ".$buyXp." WHERE uid = '". $this->uid. "'";
-            $conn->query($query);
+
+        if ($res && is_numeric($this->uid)){
+            $cost = (int) ($res["cost"] ?? 0);
+            $plantXp = (int) ($res["plantXp"] ?? 0);
+
+            $conn = $db->getDb();
+            $stmt = $conn->prepare("UPDATE usermeta SET gold = gold - ?, xp = xp + ? WHERE uid = ?");
+            $stmt->bind_param("iis", $cost, $plantXp, $this->uid);
+            $stmt->execute();
+            $db->destroy();
         }
-        $db->destroy();
     }
 
     public function plowLand(){
