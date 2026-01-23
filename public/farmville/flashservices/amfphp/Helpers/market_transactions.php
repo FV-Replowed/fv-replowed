@@ -47,10 +47,13 @@ class MarketTransactions {
         
         $res = getItemByName($data->itemName, "db");
 
-        if ($res && $res["coinYield"]){
+        if ($res && is_numeric($this->uid)){
+            $coinYield = (int) ($res["coinYield"] ?? 0);
+
             $conn = $db->getDb();
-            $query = "UPDATE usermeta SET `gold` = gold + " . $res['coinYield'] . ", xp = xp + ".$res['coinYield']." WHERE uid = '". $this->uid. "'";
-            $conn->query($query);
+            $stmt = $conn->prepare("UPDATE usermeta SET gold = gold + ? WHERE uid = ?");
+            $stmt->bind_param("is", $coinYield, $this->uid);
+            $stmt->execute();
             $db->destroy();
         }
     }
