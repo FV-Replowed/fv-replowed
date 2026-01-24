@@ -63,14 +63,15 @@ class MarketTransactions {
         global $db;
         
         $res = getItemByName($data->itemName, "db");
+        $maxXp = 2_147_400_000; // minimum points required to reach the highest level
 
         if ($res && is_numeric($this->uid)){
             $cost = (int) ($res["cost"] ?? 0);
             $plantXp = (int) ($res["plantXp"] ?? 0);
 
             $conn = $db->getDb();
-            $stmt = $conn->prepare("UPDATE usermeta SET gold = gold - ?, xp = xp + ? WHERE uid = ?");
-            $stmt->bind_param("iis", $cost, $plantXp, $this->uid);
+            $stmt = $conn->prepare("UPDATE usermeta SET gold = GREATEST(gold - ?, 0), xp = LEAST(xp + ?, ?) WHERE uid = ?");
+            $stmt->bind_param("iiis", $cost, $plantXp, $maxXp, $this->uid);
             $stmt->execute();
             $db->destroy();
         }
