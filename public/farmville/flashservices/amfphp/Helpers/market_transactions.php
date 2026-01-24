@@ -3,6 +3,7 @@ require_once AMFPHP_ROOTPATH . "Helpers/globals.php";
 require_once AMFPHP_ROOTPATH . "Helpers/database.php";
 require_once AMFPHP_ROOTPATH . "Helpers/general_functions.php";
 
+// TODO: reduce redundancy
 class MarketTransactions {
     private $uid = null;
     private $db = null;
@@ -28,16 +29,21 @@ class MarketTransactions {
         }
     }
 
+    // TODO: improve accuracy
     public function sellItem(object $data){
         global $db;
 
         $res = getItemByName($data->itemName, "db");
+        $maxGold = 999_999_999; // specified by the engine
 
-        if ($res && $res["cost"]){
+        if ($res && is_numeric($this->uid)){
+            $saleValue = (int) ($res["cost"] ?? 0);
+            $saleValue = (int) ($saleValue * 0.05);
+
             $conn = $db->getDb();
-            $sellCost = $res['cost'] * 0.05;
-            $query = "UPDATE usermeta SET `gold` = gold + " . $sellCost . " WHERE uid = '". $this->uid. "'";
-            $conn->query($query);
+            $stmt = $conn->prepare("UPDATE usermeta SET gold = LEAST(gold + ?, ?) WHERE uid = ?");
+            $stmt->bind_param("iis", $saleValue, $maxGold, $this->uid);
+            $stmt->execute();
             $db->destroy();
         }
     }
@@ -94,5 +100,3 @@ class MarketTransactions {
         }
     }
 }
-
-
