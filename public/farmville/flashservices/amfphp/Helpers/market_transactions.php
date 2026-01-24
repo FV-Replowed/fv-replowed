@@ -46,13 +46,14 @@ class MarketTransactions {
         global $db;
         
         $res = getItemByName($data->itemName, "db");
+        $maxGold = 999_999_999; // specified by the engine
 
         if ($res && is_numeric($this->uid)){
             $coinYield = (int) ($res["coinYield"] ?? 0);
 
             $conn = $db->getDb();
-            $stmt = $conn->prepare("UPDATE usermeta SET gold = gold + ? WHERE uid = ?");
-            $stmt->bind_param("is", $coinYield, $this->uid);
+            $stmt = $conn->prepare("UPDATE usermeta SET gold = LEAST(gold + ?, ?) WHERE uid = ?");
+            $stmt->bind_param("iis", $coinYield, $maxGold, $this->uid);
             $stmt->execute();
             $db->destroy();
         }
