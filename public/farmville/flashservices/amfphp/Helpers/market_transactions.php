@@ -20,6 +20,7 @@ class MarketTransactions {
                 break;
             case "harvest":
                 $this->harvestCrop($data);
+                break;
             case "place":
                 $this->buyItem($data);
                 break;
