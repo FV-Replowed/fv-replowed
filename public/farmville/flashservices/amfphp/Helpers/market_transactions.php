@@ -80,10 +80,18 @@ class MarketTransactions {
 
     public function plowLand(){
         global $db;
-        $conn = $db->getDb();
-        $query = "UPDATE usermeta SET `gold` = gold - 15, `xp` = xp + 1 WHERE uid = '". $this->uid. "'";
-        $conn->query($query);
-        $db->destroy();
+
+        $cost = 15;
+        $maxXp = 2_147_400_000; // minimum points required to reach the highest level
+        $plowXp = 1;
+
+        if (is_numeric($this->uid)){
+            $conn = $db->getDb();
+            $stmt = $conn->prepare("UPDATE usermeta SET gold = GREATEST(gold - ?, 0), xp = LEAST(xp + ?, ?) WHERE uid = ?");
+            $stmt->bind_param("iiis", $cost, $plowXp, $maxXp, $this->uid);
+            $stmt->execute();
+            $db->destroy();
+        }
     }
 }
 
