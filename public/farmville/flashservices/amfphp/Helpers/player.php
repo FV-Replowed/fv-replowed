@@ -19,15 +19,18 @@ class Player {
         return $this->uid;
     }
 
+    // TODO: make quotes consistent
     public function getData($requ) {
-        $query = "SELECT * FROM usermeta WHERE uid = '" . $this->uid ."'";
-
+        // either the database will have the expected data, or it won't
+        // not going to bother validating further
         $conn = $this->db->getDb();
+        $stmt = $conn->prepare("SELECT * FROM usermeta WHERE uid = ?");
+        $stmt->bind_param("s", $this->uid);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $this->db->destroy();
 
-        $result = $conn->query($query);
-
-        $res = $result->fetch_assoc();
-        
         $currentWorldType = get_meta($this->uid, "currentWorldType") ? get_meta($this->uid, "currentWorldType") : "farm";
         $currentWorld = getWorldByType($this->uid, $currentWorldType);
 
@@ -51,7 +54,7 @@ class Player {
                 "wishName" => null,
                 "wishImage" => null
             ),
-            "energy" => $res['energy'],
+            "energy" => $row['energy'],
             "locale" => "en_US",
             "witherOn" => true,
             "isFarmvilleFan" => false,
@@ -115,7 +118,7 @@ class Player {
             "userInfo" => array(
                 "currentWorldType" => $currentWorldType,
                 "attr" => array(
-                    "name" => $res["firstName"]
+                    "name" => $row["firstName"]
                 ),
                 "unlockedWorldTypes" => array(
                     "yuletide",
@@ -258,11 +261,11 @@ class Player {
                     "xty"
                 ),
                 "player" => array(
-                    "gold" => $res['gold'],
-                    "cash" => $res['cash'],
-                    "xp" => $res['xp'],
-                    "energyMax" => $res['energyMax'],
-                    "energy" => $res['energy'],
+                    "gold" => $row['gold'],
+                    "cash" => $row['cash'],
+                    "xp" => $row['xp'],
+                    "energyMax" => $row['energyMax'],
+                    "energy" => $row['energy'],
                     "options" => array(
                         "sfxDisabled" => false,
                         "musicDisabled" => false,
@@ -420,11 +423,11 @@ class Player {
                     // 'storageCapacityHash' => array(
                     //     "-2" => 500
                     // ),
-                    'userId' => $res['uid'],
+                    'userId' => $row['uid'],
                     'featureCredits' => "10",
                     'incrementalFriendChecks' => array(),
                     'friendRewards' => null,
-                    'seenFlags' => unserialize($res['seenFlags']), //tutorial flag
+                    'seenFlags' => unserialize($row['seenFlags']), //tutorial flag
                     'itemFlags' => array("giftcard" => ""),
                     'featureFrequency' => array(
                         "AvatarIndicatorLastInteraction" => 10,
@@ -447,8 +450,8 @@ class Player {
                         "lastLoaded" => strtotime(date("Y-m-d h:i:s"))
                     )
                 ), //TODO
-                "is_new" => $res["isNew"],
-                "firstDay" => $res["firstDay"],
+                "is_new" => $row["isNew"],
+                "firstDay" => $row["firstDay"],
                 "firstDayTimestamp" => 0,
                 "featureOptions"=> array(
                     "world_seasons" => array(
