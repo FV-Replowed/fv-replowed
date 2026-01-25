@@ -146,6 +146,8 @@
     function createWorldByType($uid, $type = "farm" ){
         global $db;
 
+        $defaultSize = 48;
+        $defaultMessageManager = "";
         $newWorld = serialize(array(
                 (object)[
                     "id" => 1,
@@ -243,7 +245,7 @@
                     "isJumbo" => false
                 ],
                 (object)[
-                    "id" => 1,
+                    "id" => 6,
                     "state" => "fallow",
                     "isBigPlot"=> false,
                     "plantTime" => "", //NOW - TIME TO GROW
@@ -263,12 +265,14 @@
                 ],
             ));
         
-        $conn = $db->getDb();
-        $query = "INSERT INTO userworlds (`uid`, `type`, `sizeX`, `sizeY`, `objects`, `messageManager`) VALUES ('{$uid}','{$type}','48','48','{$newWorld}','')";
-
-        $conn->query($query);
-
-        $db->destroy();
+        // only checking if the serialization was successful JUST IN CASE
+        if (is_numeric($uid) && is_string($type) && $type !== "" && is_string($newWorld)){
+            $conn = $db->getDb();
+            $stmt = $conn->prepare("INSERT INTO userworlds (uid, type, sizeX, sizeY, objects, messageManager) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssiiss", $uid, $type, $defaultSize, $defaultSize, $newWorld, $defaultMessageManager);
+            $stmt->execute();
+            $db->destroy();
+        }
 
         return array(
             "uid" => $uid,
