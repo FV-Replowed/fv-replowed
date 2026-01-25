@@ -470,16 +470,18 @@ class Player {
     
 
     public function getAvatar(){
-        
-        $query = "SELECT value FROM useravatars WHERE uid = '" . $this->uid ."'";
-        $conn = $this->db->getDb();
+        $this->avatarData = null;
 
-        $result = $conn->query($query);
-
-        $res = $result->fetch_assoc();
-        
-
-        $this->avatarData = $res["value"] != null ? unserialize($res["value"]) : null;
+        if (is_numeric($this->uid)){
+            $conn = $this->db->getDb();
+            $stmt = $conn->prepare("SELECT value FROM useravatars WHERE uid = ?");
+            $stmt->bind_param("s", $this->uid);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc() ?? [];
+            $this->avatarData = unserialize($row["value"] ?? null) ?? null;
+            $this->db->destroy();
+        }
 
         return $this->avatarData;
     }
