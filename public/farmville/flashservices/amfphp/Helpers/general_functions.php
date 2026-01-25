@@ -6,22 +6,29 @@
      * @param string $uid User ID
      * @param string $meta_key Meta Key
      * @return string The value of the meta field
-     *                False for incalid $uid of non found $meta_key
+     *                False for invalid $uid of non found $meta_key
      */
     function get_meta($uid, $meta_key){
         global $db;
 
-        $meta = null;
+        $meta = [];
 
-        $conn = $db->getDb();
-        $query = "SELECT meta_value FROM playermeta WHERE meta_key = '{$meta_key}' AND uid = '{$uid}'";
-        // var_dump($conn->query($query));
-        $result = $conn->query($query);
-        if ($result->num_rows > 0){
-            $meta = $result->fetch_assoc();
+        if (is_numeric($uid) && is_string($meta_key) && $meta_key !== ""){
+            $conn = $db->getDb();
+            $stmt = $conn->prepare("SELECT meta_value FROM playermeta WHERE meta_key = ? AND uid = ?");
+            $stmt->bind_param("ss", $meta_key, $uid);
+            $stmt->execute();
+            // var_dump($conn->query($query));
+            $result = $stmt->get_result();
+            
+            if ($result->num_rows > 0){
+                $meta = $result->fetch_assoc();
+            }
+
+            $db->destroy();
         }
-        $db->destroy();
-        return $meta != null ? $meta['meta_value'] : false;
+
+        return $meta["meta_value"] ?? false;
     }
 
 
