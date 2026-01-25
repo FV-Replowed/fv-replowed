@@ -687,26 +687,29 @@ class Player {
     }
 
     public function getPlayerData($uid){
+        if (is_numeric($uid)){
+            $conn = $this->db->getDb();
+            $stmt = $conn->prepare("SELECT us.uid as uid, us.name as name, um.firstName as firstname, um.lastName as lastname FROM users AS us INNER JOIN usermeta AS um ON us.uid = um.uid WHERE us.uid = ?");
+            $stmt->bind_param("s", $uid);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            $this->db->destroy();
+            
+            // if the row's contents are invalid, loading SHOULD fail
+            return (object) [
+                "uid" => $row['uid'],
+                "name" => $row['name'],
+                "first_name" => $row['firstname'],
+                "last_name" => $row['lastname'],
+                "is_app_user" => true,
+                "valid" => true,
+                "allowed_restrictions" => false,
+                "pic_square" => "",
+                "pic_big" => ""
+            ];
+        }
 
-        $conn = $this->db->getDb();
-        $query = "SELECT us.uid as uid, us.name as name, um.firstName as firstname, um.lastName as lastname FROM users AS us INNER JOIN usermeta AS um ON us.uid = um.uid WHERE us.uid LIKE '{$uid}'";
-        // echo $query;
-        $result = $conn->query($query);
-        $res = $result->fetch_assoc();
-        
-        return (object) [
-            "uid" => $res['uid'],
-            "name" => $res['name'],
-            "first_name" => $res['firstname'],
-            "last_name" => $res['lastname'],
-            "is_app_user" => true,
-            "valid" => true,
-            "allowed_restrictions" => false,
-            "pic_square" => "",
-            "pic_big" => ""
-        ];
+        return (object) [];
     }
-
 }
-
-?>
