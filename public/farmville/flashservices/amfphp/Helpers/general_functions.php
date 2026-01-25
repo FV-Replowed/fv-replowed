@@ -106,11 +106,11 @@
         return false;
     }
 
-
+    /*
     function getWorldByUid($uid){
         return getWorldByType($uid);
     }
-
+    */
     function getWorldByType($uid, $type = "farm"){
         global $db;
 

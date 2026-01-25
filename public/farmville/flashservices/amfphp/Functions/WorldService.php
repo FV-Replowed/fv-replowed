@@ -53,7 +53,7 @@ class WorldService
     }
 
     public static function loadNeighborWorld($playerObj, $request){
-        $travelWorld = getWorldByUid($request->params[0]);
+        $travelWorld = getWorldByType($request->params[0]);
         $data["data"] = array(
             "user" => array(
                 "ugcItemData" => [
