@@ -587,15 +587,14 @@ class Player {
         }
         
         $this->worldData = $currWorld;
+        $objects = serialize($currWorld["objectsArray"]);
         
-        
+        // No need for further validation (Would have already failed)
         $conn = $this->db->getDb();
-        
-        $query = "UPDATE userworlds SET `objects` = '" . serialize($currWorld["objectsArray"]) . "', `sizeX` = ".$currWorld["sizeX"].", `sizeY` = ".$currWorld["sizeY"]." WHERE uid = '". $this->uid. "'";
-        
-        $conn->query($query);
-        
-        
+        $stmt = $conn->prepare("UPDATE userworlds SET objects = ?, sizeX = ?, sizeY = ? WHERE uid = ?");
+        $stmt->bind_param("siis", $objects, $currWorld["sizeX"], $currWorld["sizeY"], $this->uid);        
+        $stmt->execute();
+        $this->db->destroy();
     
         if ($newId > 0){
             return $newId;
