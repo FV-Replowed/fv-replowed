@@ -81,19 +81,23 @@
     function getItemByName($itemName, $method = "json"){
         global $db;
 
-        if ($method == "db"){
-            $query = "SELECT * FROM items WHERE name = '{$itemName}'";
-            $conn = $db->getDb();
-            $result = $conn->query($query);
-            $res = $result->fetch_assoc();
-            $db->destroy();
-            return unserialize($res['data']);
-        }else{
+        if (is_string($itemName) && $itemName !== ""){
+            if ($method === "db"){
+                $conn = $db->getDb();
+                $stmt = $conn->prepare("SELECT * FROM items WHERE name = ?");
+                $stmt->bind_param("s", $itemName);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $item = $result->fetch_assoc() ?? [];
+                $db->destroy();
+
+                return unserialize($item['data'] ?? null);
+            }
+
             $items_str = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/props/items.json");
             $items = json_decode($items_str);
             foreach ($items->settings->items->item as $item){
                 if ($item->name == $itemName){
-                    
                     return (array) $item;
                 }
             }
