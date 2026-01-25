@@ -108,28 +108,7 @@
 
 
     function getWorldByUid($uid){
-        global $db;
-
-        $worldData = [];
-
-        $query = "SELECT * FROM userworlds WHERE type = 'farm' AND uid = '{$uid}'";
-        $conn = $db->getDb();
-        $result = $conn->query($query);
-
-        
-        $db->destroy();
-        
-        if ($result->num_rows > 0){
-            $res = $result->fetch_assoc();
-            $worldData["type"] = $res["type"];
-            $worldData["sizeX"] = $res["sizeX"];
-            $worldData["sizeY"] = $res["sizeY"];
-            $worldData["objectsArray"] = unserialize($res["objects"]);
-            $worldData['creation'] = $res["created_at"];
-            $worldData["messageManager"] = array();
-        }
-
-        return $worldData;
+        return getWorldByType($uid);
     }
 
     function getWorldByType($uid, $type = "farm"){
