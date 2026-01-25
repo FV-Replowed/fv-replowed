@@ -116,27 +116,29 @@
 
         $worldData = [];
 
-        $query = "SELECT * FROM userworlds WHERE type = '{$type}' AND uid = '{$uid}'";
-        $conn = $db->getDb();
-        $result = $conn->query($query);
+        if (is_numeric($uid) && is_string($type) && $type !== ""){
+            $conn = $db->getDb();
+            $stmt = $conn->prepare("SELECT * FROM userworlds WHERE type = ? AND uid = ?");
+            $stmt->bind_param("ss", $type, $uid);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
-        
-        $db->destroy();
-        
-        if ($result->num_rows > 0){
-            $res = $result->fetch_assoc();
-            $worldData["type"] = $res["type"];
-            $worldData["sizeX"] = $res["sizeX"];
-            $worldData["sizeY"] = $res["sizeY"];
-            $worldData["objectsArray"] = unserialize($res["objects"]);
-            $worldData['creation'] = $res["created_at"];
-            $worldData["messageManager"] = array();
-        }else{
-            $worldData = createWorldByType($uid, $type);
+            if ($result->num_rows > 0){
+                // no point in validating further
+                // if the row's contents are invalid, loading SHOULD fail
+                $row = $result->fetch_assoc();
+                $worldData["type"] = $row["type"];
+                $worldData["sizeX"] = $row["sizeX"];
+                $worldData["sizeY"] = $row["sizeY"];
+                $worldData["objectsArray"] = unserialize($row["objects"]);
+                $worldData["creation"] = $row["created_at"];
+                $worldData["messageManager"] = array();
+            }else{
+                $worldData = createWorldByType($uid, $type);
+            }
+
+            $db->destroy();
         }
-
-       
-
         
         return $worldData;
     }
