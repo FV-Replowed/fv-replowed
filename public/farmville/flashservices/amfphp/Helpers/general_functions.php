@@ -45,20 +45,22 @@
     function set_meta($uid, $meta_key, $meta_value){
         global $db;
 
-        $meta_rec = get_meta($uid, $meta_key);
-
+        $meta_rec = get_meta($uid, $meta_key); // params validated inside
         $conn = $db->getDb();
-        $query = "";
-        if ($meta_rec){
-            $query = "UPDATE playermeta SET `meta_value` = '{$meta_value}' WHERE uid = '{$uid}' AND `meta_key` = '{$meta_key}'";
-        }else{
-            $query = "INSERT INTO `playermeta` (`uid`, `meta_key`, `meta_value`) VALUES ('{$uid}','{$meta_key}','{$meta_value}')";
-        }
-
-        $conn->query($query);
-
-        $db->destroy();
         
+        if (is_string($meta_value)){
+            if ($meta_rec){
+                $stmt = $conn->prepare("UPDATE playermeta SET meta_value = ? WHERE uid = ? AND meta_key = ?");
+                $stmt->bind_param("sss", $meta_value, $uid, $meta_key);
+                $stmt->execute();
+            }else{
+                $stmt = $conn->prepare("INSERT INTO playermeta (uid, meta_key, meta_value) VALUES (?, ?, ?)");
+                $stmt->bind_param("sss", $uid, $meta_key, $meta_value);
+                $stmt->execute();
+            }
+
+            $db->destroy();
+        }
     }
 
     function compressArray($array){
