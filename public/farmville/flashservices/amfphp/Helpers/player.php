@@ -605,12 +605,14 @@ class Player {
     }
 
     public function setAvatar($attribs){
-        $conn = $this->db->getDb();
-                
-        $query = "UPDATE useravatars SET `value` = '" . serialize($attribs) . "' WHERE uid = '". $this->uid. "'";
-        $conn->query($query);
-        
-        
+        if (is_numeric($this->uid) && is_array($attribs)){
+            $attribs = serialize($attribs);
+            $conn = $this->db->getDb();
+            $stmt = $conn->prepare("UPDATE useravatars SET value = ? WHERE uid = ?");
+            $stmt->bind_param("ss", $attribs, $this->uid);
+            $stmt->execute();
+            $this->db->destroy();
+        }
     }
 
     public function getPlayerDataForNeighbor(){
