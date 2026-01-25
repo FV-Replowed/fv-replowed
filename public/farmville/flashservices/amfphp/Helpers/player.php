@@ -616,14 +616,23 @@ class Player {
     }
 
     public function getPlayerDataForNeighbor(){
-        $conn = $this->db->getDb();
-        $query = "SELECT us.uid as uid, us.name as name, um.firstName as firstname, um.lastName as lastname FROM users AS us INNER JOIN usermeta AS um ON us.uid = um.uid WHERE us.uid NOT LIKE '{$this->uid}'";
-        // echo $query;
-        $result = $conn->query($query);
-        $res = $result->fetch_all(MYSQLI_ASSOC);
-        
-        return $res;
-        
+        $rows = [];
+
+        if (is_numeric($this->uid)){
+            $conn = $this->db->getDb();
+            $stmt = $conn->prepare("SELECT us.uid as uid, us.name as name, um.firstName as firstname, um.lastName as lastname FROM users AS us INNER JOIN usermeta AS um ON us.uid = um.uid WHERE us.uid <> ?");
+            $stmt->bind_param("s", $this->uid);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result){
+                $rows = $result->fetch_all(MYSQLI_ASSOC);
+            }
+            
+            $this->db->destroy();
+        }
+
+        return $rows;
     }
 
     public function getCurrentNeighbors(){
