@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\UserMeta;
 use App\Models\UserAvatar;
-use App\Models\UserWorld;
+//use App\Models\UserWorld;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -74,6 +74,8 @@ class RegisteredUserController extends Controller
             'value' => null
         ]);
 
+        // worlds will be created if they don't exist, so this code is redundant
+        /* 
         // Unix timestamp in milliseconds
         $plantTime = (float) ((time() * 1000) - 172800000); // pretend 2 days elapsed
 
@@ -230,6 +232,7 @@ class RegisteredUserController extends Controller
             )),
             'messageManager' => ""
         ]);
+        */
 
         event(new Registered($user));
 
