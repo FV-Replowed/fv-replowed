@@ -74,126 +74,159 @@ class RegisteredUserController extends Controller
             'value' => null
         ]);
 
+        // Unix timestamp in milliseconds
+        $plantTime = (float) ((time() * 1000) - 172800000); // pretend 2 days elapsed
+
         $userWorld = UserWorld::create([
             'uid' => $newUid,
             'type' => 'farm',
             'sizeX' => 48,
             'sizeY' => 48,
             'objects' => serialize(array(
-                (object)[
-                    "id" => 1,
-                    "state" => "grown",
-                    "isBigPlot"=> false,
-                    "plantTime" => (time() * 1000) - 14450, //NOW - TIME TO GROW
-                    "direction" => 0,
-                    "isProduceItem" => 0, //????
-                    "position" => array(
-                        "x" => 19,
-                        "y" => 9,
-                        "z" => 0
+                0 => 
+                (object) array(
+                    'plantTime' => $plantTime,
+                    'position' => 
+                    (object) array(
+                    'x' => 27,
+                    'z' => 0,
+                    'y' => 13,
                     ),
-                    "tempId" => -1,
-                    "deleted" => false,
-                    "itemName" => "strawberry",
-                    "className" => "Plot",
-                    "components" => array(),
-                    "isJumbo" => false
-                ],
-                (object)[
-                    "id" => 2,
-                    "state" => "grown",
-                    "isBigPlot"=> false,
-                    "plantTime" => (time() * 1000) - 14450, //NOW - TIME TO GROW
-                    "direction" => 0,
-                    "isProduceItem" => 0, //????
-                    "position" => array(
-                        "x" => 19,
-                        "y" => 13,
-                        "z" => 0
+                    'isBigPlot' => false,
+                    'direction' => 0,
+                    'isJumbo' => true,
+                    'deleted' => false,
+                    'tempId' => -1,
+                    'className' => 'Plot',
+                    'state' => 'fallow',
+                    'instanceDataStoreKey' => NULL,
+                    'components' => 
+                    (object) array(
                     ),
-                    "tempId" => -1,
-                    "deleted" => false,
-                    "itemName" => "strawberry",
-                    "className" => "Plot",
-                    "components" => array(),
-                    "isJumbo" => false
-                ],
-                (object)[
-                    "id" => 3,
-                    "state" => "plowed",
-                    "isBigPlot"=> false,
-                    "plantTime" => "", //NOW - TIME TO GROW
-                    "direction" => 0,
-                    "isProduceItem" => 0, //????
-                    "position" => array(
-                        "x" => 23,
-                        "y" => 13,
-                        "z" => 0
+                    'isProduceItem' => false,
+                    'id' => 1,
+                    'itemName' => NULL,
+                ),
+                1 => 
+                (object) array(
+                    'plantTime' => $plantTime,
+                    'position' => 
+                    (object) array(
+                    'x' => 27,
+                    'z' => 0,
+                    'y' => 9,
                     ),
-                    "tempId" => -1,
-                    "deleted" => false,
-                    "itemName" => NULL,
-                    "className" => "Plot",
-                    "components" => array(),
-                    "isJumbo" => false
-                ],
-                (object)[
-                    "id" => 4,
-                    "state" => "plowed",
-                    "isBigPlot"=> false,
-                    "plantTime" => "", //NOW - TIME TO GROW
-                    "direction" => 0,
-                    "isProduceItem" => 0, //????
-                    "position" => array(
-                        "x" => 23,
-                        "y" => 9,
-                        "z" => 0
+                    'isBigPlot' => false,
+                    'direction' => 0,
+                    'isJumbo' => true,
+                    'deleted' => false,
+                    'tempId' => -1,
+                    'className' => 'Plot',
+                    'state' => 'fallow',
+                    'instanceDataStoreKey' => NULL,
+                    'components' => 
+                    (object) array(
                     ),
-                    "tempId" => -1,
-                    "deleted" => false,
-                    "itemName" => NULL,
-                    "className" => "Plot",
-                    "components" => array(),
-                    "isJumbo" => false
-                ],
-                (object)[
-                    "id" => 5,
-                    "state" => "fallow",
-                    "isBigPlot"=> false,
-                    "plantTime" => "", //NOW - TIME TO GROW
-                    "direction" => 0,
-                    "isProduceItem" => 0, //????
-                    "position" => array(
-                        "x" => 27,
-                        "y" => 9,
-                        "z" => 0
+                    'isProduceItem' => false,
+                    'id' => 2,
+                    'itemName' => NULL,
+                ),
+                2 => 
+                (object) array(
+                    'plantTime' => $plantTime, // finish growing now
+                    'position' => 
+                    (object) array(
+                    'x' => 19,
+                    'z' => 0,
+                    'y' => 9,
                     ),
-                    "tempId" => -1,
-                    "deleted" => false,
-                    "itemName" => NULL,
-                    "className" => "Plot",
-                    "components" => array(),
-                    "isJumbo" => false
-                ],
-                (object)[
-                    "id" => 1,
-                    "state" => "fallow",
-                    "isBigPlot"=> false,
-                    "plantTime" => "", //NOW - TIME TO GROW
-                    "direction" => 0,
-                    "isProduceItem" => 0, //????
-                    "position" => array(
-                        "x" => 27,
-                        "y" => 13,
-                        "z" => 0
+                    'isBigPlot' => false,
+                    'direction' => 0,
+                    'isJumbo' => false,
+                    'deleted' => false,
+                    'tempId' => -1,
+                    'className' => 'Plot',
+                    'state' => 'planted',
+                    'instanceDataStoreKey' => NULL,
+                    'components' => 
+                    (object) array(
                     ),
-                    "tempId" => -1,
-                    "deleted" => false,
-                    "itemName" => NULL,
-                    "className" => "Plot",
-                    "components" => array(),
-                    "isJumbo" => false
-                ],
+                    'isProduceItem' => false,
+                    'id' => 3,
+                    'itemName' => 'eggplant',
+                ),
+                3 => 
+                (object) array(
+                    'plantTime' => $plantTime,
+                    'position' => 
+                    (object) array(
+                    'x' => 19,
+                    'z' => 0,
+                    'y' => 13,
+                    ),
+                    'isBigPlot' => false,
+                    'direction' => 0,
+                    'isJumbo' => false,
+                    'deleted' => false,
+                    'tempId' => -1,
+                    'className' => 'Plot',
+                    'state' => 'planted',
+                    'instanceDataStoreKey' => NULL,
+                    'components' => 
+                    (object) array(
+                    ),
+                    'isProduceItem' => false,
+                    'id' => 4,
+                    'itemName' => 'eggplant',
+                ),
+                4 => 
+                (object) array(
+                    'plantTime' => NAN,
+                    'position' => 
+                    (object) array(
+                    'x' => 23,
+                    'z' => 0,
+                    'y' => 9,
+                    ),
+                    'isBigPlot' => false,
+                    'direction' => 0,
+                    'isJumbo' => false,
+                    'deleted' => false,
+                    'tempId' => -1,
+                    'className' => 'Plot',
+                    'state' => 'plowed',
+                    'instanceDataStoreKey' => NULL,
+                    'components' => 
+                    (object) array(
+                    ),
+                    'isProduceItem' => false,
+                    'id' => 5,
+                    'itemName' => NULL,
+                ),
+                5 => 
+                (object) array(
+                    'plantTime' => NAN,
+                    'position' => 
+                    (object) array(
+                    'x' => 23,
+                    'z' => 0,
+                    'y' => 13,
+                    ),
+                    'isBigPlot' => false,
+                    'direction' => 0,
+                    'isJumbo' => false,
+                    'deleted' => false,
+                    'tempId' => -1,
+                    'className' => 'Plot',
+                    'state' => 'plowed',
+                    'instanceDataStoreKey' => NULL,
+                    'components' => 
+                    (object) array(
+                    ),
+                    'isProduceItem' => false,
+                    'id' => 6,
+                    'itemName' => NULL,
+                ),
             )),
             'messageManager' => ""
         ]);
