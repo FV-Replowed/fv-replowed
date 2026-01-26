@@ -38,7 +38,7 @@ class MarketTransactions {
         if ($res){
             $saleValue = (int) ($res["cost"] ?? 0);
             $saleValue = (int) ($saleValue * 0.05);
-            return UserResources::adjustGold($this->uid, $saleValue);
+            return UserResources::addGold($this->uid, $saleValue);
         }
 
         return false;
@@ -49,7 +49,7 @@ class MarketTransactions {
         
         if ($res){
             $coinYield = (int) ($res["coinYield"] ?? 0);
-            return UserResources::adjustGold($this->uid, $coinYield);
+            return UserResources::addGold($this->uid, $coinYield);
         }
         
         return false;
@@ -62,7 +62,7 @@ class MarketTransactions {
         if ($res){
             $cost = (int) ($res["cost"] ?? 0);
             $plantXp = (int) ($res["plantXp"] ?? 0);
-            $result1 = UserResources::adjustGold($this->uid, -$cost);
+            $result1 = UserResources::removeGold($this->uid, $cost);
             $result2 = userResources::addXp($this->uid, $plantXp);
             return ($result1 && $result2);
         }
@@ -73,7 +73,7 @@ class MarketTransactions {
     public function plowLand(){
         $cost = 15;
         $plowXp = 1;
-        $result1 = UserResources::adjustGold($this->uid, -$cost);
+        $result1 = UserResources::removeGold($this->uid, $cost);
         $result2 = UserResources::addXp($this->uid, $plowXp);
 
         return ($result1 && $result2);
