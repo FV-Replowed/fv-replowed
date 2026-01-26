@@ -4,7 +4,7 @@ require_once AMFPHP_ROOTPATH . "Helpers/database.php";
 require_once AMFPHP_ROOTPATH . "Helpers/user_resources.php";
 require_once AMFPHP_ROOTPATH . "Helpers/general_functions.php";
 
-// TODO: reduce redundancy
+// TODO: adjust structure
 class MarketTransactions {
     private $uid = null;
     private $db = null;
@@ -33,72 +33,49 @@ class MarketTransactions {
 
     // TODO: improve accuracy
     public function sellItem(object $data){
-        global $db;
-
         $res = getItemByName($data->itemName, "db");
-        $maxGold = UserResources::GOLD_MAX;
-
-        if ($res && is_numeric($this->uid)){
+        
+        if ($res){
             $saleValue = (int) ($res["cost"] ?? 0);
             $saleValue = (int) ($saleValue * 0.05);
-
-            $conn = $db->getDb();
-            $stmt = $conn->prepare("UPDATE usermeta SET gold = LEAST(gold + ?, ?) WHERE uid = ?");
-            $stmt->bind_param("iis", $saleValue, $maxGold, $this->uid);
-            $stmt->execute();
-            $db->destroy();
+            return UserResources::adjustGold($this->uid, $saleValue);
         }
+
+        return false;
     }
 
-    public function harvestCrop(object $data){
-        global $db;
-        
+    public function harvestCrop(object $data){        
         $res = getItemByName($data->itemName, "db");
-        $maxGold = UserResources::GOLD_MAX;
-
-        if ($res && is_numeric($this->uid)){
+        
+        if ($res){
             $coinYield = (int) ($res["coinYield"] ?? 0);
-
-            $conn = $db->getDb();
-            $stmt = $conn->prepare("UPDATE usermeta SET gold = LEAST(gold + ?, ?) WHERE uid = ?");
-            $stmt->bind_param("iis", $coinYield, $maxGold, $this->uid);
-            $stmt->execute();
-            $db->destroy();
+            return UserResources::adjustGold($this->uid, $coinYield);
         }
+        
+        return false;
     }
 
     // TODO: add cash support
     public function buyItem(object $data){
-        global $db;
-        
         $res = getItemByName($data->itemName, "db");
-        $maxXp = UserResources::XP_MAX;
 
-        if ($res && is_numeric($this->uid)){
+        if ($res){
             $cost = (int) ($res["cost"] ?? 0);
             $plantXp = (int) ($res["plantXp"] ?? 0);
-
-            $conn = $db->getDb();
-            $stmt = $conn->prepare("UPDATE usermeta SET gold = GREATEST(gold - ?, 0), xp = LEAST(xp + ?, ?) WHERE uid = ?");
-            $stmt->bind_param("iiis", $cost, $plantXp, $maxXp, $this->uid);
-            $stmt->execute();
-            $db->destroy();
+            $result1 = UserResources::adjustGold($this->uid, -$cost);
+            $result2 = userResources::addXp($this->uid, $plantXp);
+            return ($result1 && $result2);
         }
+
+        return false;
     }
 
     public function plowLand(){
-        global $db;
-
         $cost = 15;
-        $maxXp = UserResources::XP_MAX;
         $plowXp = 1;
+        $result1 = UserResources::adjustGold($this->uid, -$cost);
+        $result2 = UserResources::addXp($this->uid, $plowXp);
 
-        if (is_numeric($this->uid)){
-            $conn = $db->getDb();
-            $stmt = $conn->prepare("UPDATE usermeta SET gold = GREATEST(gold - ?, 0), xp = LEAST(xp + ?, ?) WHERE uid = ?");
-            $stmt->bind_param("iiis", $cost, $plowXp, $maxXp, $this->uid);
-            $stmt->execute();
-            $db->destroy();
-        }
+        return ($result1 && $result2);
     }
 }
