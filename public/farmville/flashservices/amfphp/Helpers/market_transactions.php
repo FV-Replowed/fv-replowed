@@ -1,6 +1,7 @@
 <?php 
 require_once AMFPHP_ROOTPATH . "Helpers/globals.php";
 require_once AMFPHP_ROOTPATH . "Helpers/database.php";
+require_once AMFPHP_ROOTPATH . "Helpers/user_resources.php";
 require_once AMFPHP_ROOTPATH . "Helpers/general_functions.php";
 
 // TODO: reduce redundancy
@@ -35,7 +36,7 @@ class MarketTransactions {
         global $db;
 
         $res = getItemByName($data->itemName, "db");
-        $maxGold = 999_999_999; // specified by the engine
+        $maxGold = UserResources::GOLD_MAX;
 
         if ($res && is_numeric($this->uid)){
             $saleValue = (int) ($res["cost"] ?? 0);
@@ -53,7 +54,7 @@ class MarketTransactions {
         global $db;
         
         $res = getItemByName($data->itemName, "db");
-        $maxGold = 999_999_999; // specified by the engine
+        $maxGold = UserResources::GOLD_MAX;
 
         if ($res && is_numeric($this->uid)){
             $coinYield = (int) ($res["coinYield"] ?? 0);
@@ -71,7 +72,7 @@ class MarketTransactions {
         global $db;
         
         $res = getItemByName($data->itemName, "db");
-        $maxXp = 2_147_400_000; // minimum points required to reach the highest level
+        $maxXp = UserResources::XP_MAX;
 
         if ($res && is_numeric($this->uid)){
             $cost = (int) ($res["cost"] ?? 0);
@@ -89,7 +90,7 @@ class MarketTransactions {
         global $db;
 
         $cost = 15;
-        $maxXp = 2_147_400_000; // minimum points required to reach the highest level
+        $maxXp = UserResources::XP_MAX;
         $plowXp = 1;
 
         if (is_numeric($this->uid)){
