@@ -121,144 +121,76 @@ class Player {
                     "name" => $row["firstName"]
                 ),
                 "unlockedWorldTypes" => array(
-                    "yuletide",
-                    "xyt",
-                    "pumpkin",
-                    "xpu",
-                    "aloha",
-                    "xah",
-                    "amsterdam",
-                    "xdm",
-                    "madagascar",
-                    "xmt",
-                    "farmfest",
-                    "xfs",
-                    "borabora",
-                    "xbb",
-                    "canada",
-                    "xcd",
-                    "santavillage",
-                    "xws",
-                    "spooky",
-                    "xhf",
-                    "ireland",
-                    "xid",
-                    "cocoland",
-                    "xcl",
-                    "alaska",
-                    "xsu",
-                    "twenties",
-                    "xrt",
-                    "southindia",
-                    "xbl",
-                    "casablanca",
-                    "xca",
-                    "winternord",
-                    "xwx",
-                    "halloweenmad",
-                    "xhx",
-                    "israel",
-                    "xis",
-                    "newfrontier",
-                    "xnf",
-                    "russia",
-                    "xru",
-                    "dragonvalley",
-                    "xdv",
-                    "caribbean",
-                    "xcb",
-                    "whitewinter",
-                    "xfw",
-                    "brazil",
-                    "xbr",
-                    "turtleisland",
-                    "xti",
-                    "farm",
-                    "england",
-                    "fisherman",
-                    "winterwonderland",
-                    "hawaii",
-                    "asia",
-                    "angler",
-                    "atlantis",
-                    "australia",
-                    "space",
-                    "candy",
-                    "fforest",
-                    "hlights",
-                    "rainforest",
-                    "oz",
-                    "mediterranean",
-                    "oasis",
-                    "storybook",
-                    "avalon",
-                    "wildwest",
-                    "xwa",
-                    "treasuretides",
-                    "xsa",
-                    "africa",
-                    "transylvania",
-                    "xtr",
-                    "xaf",
-                    "winter",
-                    "xwi",
-                    "india",
-                    "xin",
-                    "jungle",
-                    "xjm",
-                    "garden",
-                    "village",
-                    "hallow",
-                    "htown",
-                    "sleepyhollow",
-                    "xsh",
-                    "toyland",
-                    "xtl",
-                    "xhd",
-                    "",
-                    "xuk",
-                    "xhi",
-                    "xww",
-                    "xas",
-                    "xap",
-                    "xhw",
-                    "xeg",
-                    "xal",
-                    "xau",
-                    "xsp",
-                    "xcw",
-                    "xff",
-                    "xlg",
-                    "xrf",
-                    "xoz",
-                    "xfv",
-                    "xmd",
-                    "xoa",
-                    "xsb",
-                    "xma",
-                    "xmb",
-                    "meadows",
-                    "glen",
-                    "japan",
-                    "xjp",
-                    "mount",
-                    "xmo",
-                    "limbo",
-                    "xbo",
-                    "xmas",
-                    "xch",
-                    "midwest",
-                    "xhh",
-                    "underwater",
-                    "xuw",
-                    "dreamworld",
-                    "xdw",
-                    "anglofrench",
-                    "xfe",
-                    "halloweenusa",
-                    "xha",
-                    "tuscany",
-                    "xty"
+                    //"yuletide",
+                    //"pumpkin",
+                    //"aloha",
+                    //"amsterdam",
+                    "madagascar", // GOOD
+                    //"farmfest",
+                    //"borabora",
+                    "canada", // GOOD
+                    "santavillage", // GOOD
+                    //"spooky",
+                    //"ireland",
+                    //"cocoland",
+                    "alaska", // GOOD
+                    //"twenties",
+                    //"southindia",
+                    //"casablanca",
+                    "winternord", // GOOD
+                    //"halloweenmad",
+                    //"israel",
+                    //"newfrontier",
+                    //"russia",
+                    "dragonvalley", // GOOD
+                    "caribbean", // GOOD
+                    //"whitewinter",
+                    "brazil", // GOOD
+                    //"turtleisland",
+                    "farm", // GOOD
+                    "england", // GOOD
+                    "fisherman", // GOOD
+                    "winterwonderland", // GOOD
+                    "hawaii", // GOOD
+                    "asia", // GOOD
+                    //"angler", // VERY BAD
+                    "atlantis", // GOOD
+                    "australia", // GOOD
+                    "space", // GOOD
+                    "candy", // GOOD
+                    "fforest", // GOOD
+                    "hlights", // GOOD
+                    "rainforest", // GOOD
+                    "oz", // GOOD
+                    "mediterranean", // GOOD
+                    "oasis", // GOOD
+                    "storybook", // GOOD
+                    //"avalon",
+                    "wildwest", // GOOD
+                    "treasuretides", // GOOD
+                    "africa", // GOOD
+                    "transylvania", // GOOD
+                    //"winter",
+                    //"india",
+                    //"jungle",
+                    "garden", // GOOD (but interesting)
+                    "village", // GOOD
+                    "hallow", // GOOD
+                    "htown", // GOOD
+                    "sleepyhollow", // GOOD
+                    "toyland", // GOOD
+                    "meadows", // GOOD
+                    "glen", // GOOD
+                    //"japan", // interesting
+                    //"mount",
+                    "limbo", // GOOD
+                    //"xmas",
+                    //"midwest",
+                    //"underwater",
+                    //"dreamworld",
+                    //"anglofrench",
+                    "halloweenusa", // GOOD
+                    //"tuscany",
                 ),
                 "player" => array(
                     "gold" => $row['gold'],
