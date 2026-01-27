@@ -35,7 +35,6 @@ class DatabaseSeeder extends Seeder
 
         $userAvatar = UserAvatar::create([
             'uid' => $testUid,
-            'value' => null
         ]);
     }
 }

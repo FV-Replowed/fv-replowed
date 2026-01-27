@@ -64,7 +64,7 @@ class RegisteredUserController extends Controller
 
         $userAvatar = UserAvatar::create([
             'uid' => $newUid,
-            'value' => null
+            // the other field defaults to null
         ]);
 
         // worlds will be created if they don't exist, so this code is redundant
