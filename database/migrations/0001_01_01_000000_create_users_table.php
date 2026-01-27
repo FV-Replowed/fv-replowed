@@ -68,11 +68,13 @@ return new class extends Migration
         });
 
         Schema::create('userworlds', function (Blueprint $table) {
+            $classicSize = 12;
+
             $table->id();
             $table->string('uid', 20);
             $table->string('type', 20);
-            $table->integer('sizeX');
-            $table->integer('sizeY');
+            $table->integer('sizeX')->default($classicSize);
+            $table->integer('sizeY')->default($classicSize);
             $table->text('objects');
             $table->text('messageManager');
             $table->timestamps();

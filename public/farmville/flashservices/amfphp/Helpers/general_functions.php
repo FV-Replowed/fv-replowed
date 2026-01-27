@@ -146,8 +146,8 @@
     function createWorldByType($uid, $type = "farm" ){
         global $db;
 
-        $defaultSize = 48;
-        $defaultMessageManager = "";
+        $size = 48; // once expansions are fixed, the schema default should be used
+        $messageManager = "";
 
         // Unix timestamp in milliseconds
         $plantTime = (float) ((time() * 1000) - 172800000); // pretend 2 days elapsed
@@ -303,7 +303,7 @@
         if (is_numeric($uid) && is_string($type) && $type !== "" && is_string($newWorld)){
             $conn = $db->getDb();
             $stmt = $conn->prepare("INSERT INTO userworlds (uid, type, sizeX, sizeY, objects, messageManager) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("ssiiss", $uid, $type, $defaultSize, $defaultSize, $newWorld, $defaultMessageManager);
+            $stmt->bind_param("ssiiss", $uid, $type, $size, $size, $newWorld, $messageManager);
             $stmt->execute();
             $db->destroy();
         }
@@ -311,8 +311,8 @@
         return array(
             "uid" => $uid,
             'type' => $type,
-            'sizeX' => 48,
-            'sizeY' => 48,
+            'sizeX' => $size,
+            'sizeY' => $size,
             'objectsArray' => unserialize($newWorld),
             'messageManager' => array(),
             'creation' => date("Y-m-d h:i:s")

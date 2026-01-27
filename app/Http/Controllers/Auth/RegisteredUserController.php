@@ -75,8 +75,6 @@ class RegisteredUserController extends Controller
         $userWorld = UserWorld::create([
             'uid' => $newUid,
             'type' => 'farm',
-            'sizeX' => 48,
-            'sizeY' => 48,
             'objects' => serialize(array(
                 0 => 
                 (object) array(
