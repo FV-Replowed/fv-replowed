@@ -19,13 +19,14 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
-            $table->timestamp('created_at')->nullable();
+            $table->timestamp('created_at')->useCurrent();
         });
 
         Schema::create('sessions', function (Blueprint $table) {
@@ -41,7 +42,8 @@ return new class extends Migration
             $table->id();
             $table->string('uid', 20);
             $table->text('value')->nullable();
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
 
         Schema::create('usermeta', function (Blueprint $table) {
@@ -57,7 +59,8 @@ return new class extends Migration
             $table->text('seenFlags')->default('a:1:{s:13:"ftue_complete";b:0;}');
             $table->boolean('isNew')->default(true);
             $table->boolean('firstDay')->default(true);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
 
         Schema::create('playermeta', function (Blueprint $table) {
@@ -77,7 +80,8 @@ return new class extends Migration
             $table->integer('sizeY')->default($classicSize);
             $table->text('objects');
             $table->text('messageManager');
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
     }
 
