@@ -59,14 +59,7 @@ class RegisteredUserController extends Controller
             'uid' => $newUid,
             'firstName' => request('firstName'),
             'lastName' => request('lastName'),
-            'xp' => 0,  // Initialize other fields as needed
-            'cash' => 15,
-            'gold' => 500,
-            'energyMax' => 100,
-            'energy' => 100,
-            'seenFlags' => 'a:1:{s:13:"ftue_complete";b:0;}',
-            'isNew' => true,
-            "firstDay" => true
+            // the schema specifies additional defaults
         ]);
 
         $userAvatar = UserAvatar::create([

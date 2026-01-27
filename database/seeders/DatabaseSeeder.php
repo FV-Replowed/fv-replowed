@@ -31,16 +31,6 @@ class DatabaseSeeder extends Seeder
             'uid' => $testUid,
             'firstName' => 'Test',
             'lastName' => 'User',
-            
-            // TODO: make these schema defaults
-            'xp' => 0,
-            'cash' => 15,
-            'gold' => 500,
-            'energyMax' => 100,
-            'energy' => 100,
-            'seenFlags' => 'a:1:{s:13:"ftue_complete";b:0;}',
-            'isNew' => true,
-            "firstDay" => true
         ]);
 
         $userAvatar = UserAvatar::create([
