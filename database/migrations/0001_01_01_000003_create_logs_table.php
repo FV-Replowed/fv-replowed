@@ -10,7 +10,8 @@ return new class extends Migration {
             $table->id();
             $table->string('log_type');
             $table->text('log_content');
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
     }
 

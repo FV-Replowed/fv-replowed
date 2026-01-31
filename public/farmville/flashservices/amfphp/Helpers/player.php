@@ -19,15 +19,18 @@ class Player {
         return $this->uid;
     }
 
+    // TODO: make quotes consistent
     public function getData($requ) {
-        $query = "SELECT * FROM usermeta WHERE uid = '" . $this->uid ."'";
-
+        // either the database will have the expected data, or it won't
+        // not going to bother validating further
         $conn = $this->db->getDb();
+        $stmt = $conn->prepare("SELECT * FROM usermeta WHERE uid = ?");
+        $stmt->bind_param("s", $this->uid);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $this->db->destroy();
 
-        $result = $conn->query($query);
-
-        $res = $result->fetch_assoc();
-        
         $currentWorldType = get_meta($this->uid, "currentWorldType") ? get_meta($this->uid, "currentWorldType") : "farm";
         $currentWorld = getWorldByType($this->uid, $currentWorldType);
 
@@ -51,7 +54,7 @@ class Player {
                 "wishName" => null,
                 "wishImage" => null
             ),
-            "energy" => $res['energy'],
+            "energy" => $row['energy'],
             "locale" => "en_US",
             "witherOn" => true,
             "isFarmvilleFan" => false,
@@ -115,154 +118,86 @@ class Player {
             "userInfo" => array(
                 "currentWorldType" => $currentWorldType,
                 "attr" => array(
-                    "name" => $res["firstName"]
+                    "name" => $row["firstName"]
                 ),
                 "unlockedWorldTypes" => array(
-                    "yuletide",
-                    "xyt",
-                    "pumpkin",
-                    "xpu",
-                    "aloha",
-                    "xah",
-                    "amsterdam",
-                    "xdm",
-                    "madagascar",
-                    "xmt",
-                    "farmfest",
-                    "xfs",
-                    "borabora",
-                    "xbb",
-                    "canada",
-                    "xcd",
-                    "santavillage",
-                    "xws",
-                    "spooky",
-                    "xhf",
-                    "ireland",
-                    "xid",
-                    "cocoland",
-                    "xcl",
-                    "alaska",
-                    "xsu",
-                    "twenties",
-                    "xrt",
-                    "southindia",
-                    "xbl",
-                    "casablanca",
-                    "xca",
-                    "winternord",
-                    "xwx",
-                    "halloweenmad",
-                    "xhx",
-                    "israel",
-                    "xis",
-                    "newfrontier",
-                    "xnf",
-                    "russia",
-                    "xru",
-                    "dragonvalley",
-                    "xdv",
-                    "caribbean",
-                    "xcb",
-                    "whitewinter",
-                    "xfw",
-                    "brazil",
-                    "xbr",
-                    "turtleisland",
-                    "xti",
-                    "farm",
-                    "england",
-                    "fisherman",
-                    "winterwonderland",
-                    "hawaii",
-                    "asia",
-                    "angler",
-                    "atlantis",
-                    "australia",
-                    "space",
-                    "candy",
-                    "fforest",
-                    "hlights",
-                    "rainforest",
-                    "oz",
-                    "mediterranean",
-                    "oasis",
-                    "storybook",
-                    "avalon",
-                    "wildwest",
-                    "xwa",
-                    "treasuretides",
-                    "xsa",
-                    "africa",
-                    "transylvania",
-                    "xtr",
-                    "xaf",
-                    "winter",
-                    "xwi",
-                    "india",
-                    "xin",
-                    "jungle",
-                    "xjm",
-                    "garden",
-                    "village",
-                    "hallow",
-                    "htown",
-                    "sleepyhollow",
-                    "xsh",
-                    "toyland",
-                    "xtl",
-                    "xhd",
-                    "",
-                    "xuk",
-                    "xhi",
-                    "xww",
-                    "xas",
-                    "xap",
-                    "xhw",
-                    "xeg",
-                    "xal",
-                    "xau",
-                    "xsp",
-                    "xcw",
-                    "xff",
-                    "xlg",
-                    "xrf",
-                    "xoz",
-                    "xfv",
-                    "xmd",
-                    "xoa",
-                    "xsb",
-                    "xma",
-                    "xmb",
-                    "meadows",
-                    "glen",
-                    "japan",
-                    "xjp",
-                    "mount",
-                    "xmo",
-                    "limbo",
-                    "xbo",
-                    "xmas",
-                    "xch",
-                    "midwest",
-                    "xhh",
-                    "underwater",
-                    "xuw",
-                    "dreamworld",
-                    "xdw",
-                    "anglofrench",
-                    "xfe",
-                    "halloweenusa",
-                    "xha",
-                    "tuscany",
-                    "xty"
+                    //"yuletide",
+                    //"pumpkin",
+                    //"aloha",
+                    //"amsterdam",
+                    "madagascar", // GOOD
+                    //"farmfest",
+                    //"borabora",
+                    "canada", // GOOD
+                    "santavillage", // GOOD
+                    //"spooky",
+                    //"ireland",
+                    //"cocoland",
+                    "alaska", // GOOD
+                    //"twenties",
+                    //"southindia",
+                    //"casablanca",
+                    "winternord", // GOOD
+                    //"halloweenmad",
+                    //"israel",
+                    //"newfrontier",
+                    //"russia",
+                    "dragonvalley", // GOOD
+                    "caribbean", // GOOD
+                    //"whitewinter",
+                    "brazil", // GOOD
+                    //"turtleisland",
+                    "farm", // GOOD
+                    "england", // GOOD
+                    "fisherman", // GOOD
+                    "winterwonderland", // GOOD
+                    "hawaii", // GOOD
+                    "asia", // GOOD
+                    //"angler", // VERY BAD
+                    "atlantis", // GOOD
+                    "australia", // GOOD
+                    "space", // GOOD
+                    "candy", // GOOD
+                    "fforest", // GOOD
+                    "hlights", // GOOD
+                    "rainforest", // GOOD
+                    "oz", // GOOD
+                    "mediterranean", // GOOD
+                    "oasis", // GOOD
+                    "storybook", // GOOD
+                    //"avalon",
+                    "wildwest", // GOOD
+                    "treasuretides", // GOOD
+                    "africa", // GOOD
+                    "transylvania", // GOOD
+                    //"winter",
+                    //"india",
+                    //"jungle",
+                    "garden", // GOOD (but interesting)
+                    "village", // GOOD
+                    "hallow", // GOOD
+                    "htown", // GOOD
+                    "sleepyhollow", // GOOD
+                    "toyland", // GOOD
+                    "meadows", // GOOD
+                    "glen", // GOOD
+                    //"japan", // interesting
+                    //"mount",
+                    "limbo", // GOOD
+                    //"xmas",
+                    //"midwest",
+                    //"underwater",
+                    //"dreamworld",
+                    //"anglofrench",
+                    "halloweenusa", // GOOD
+                    //"tuscany",
                 ),
                 "player" => array(
-                    "gold" => $res['gold'],
-                    "cash" => $res['cash'],
-                    "xp" => $res['xp'],
-                    "energyMax" => $res['energyMax'],
-                    "energy" => $res['energy'],
+                    "gold" => $row['gold'],
+                    "cash" => $row['cash'],
+                    "xp" => $row['xp'],
+                    "energyMax" => $row['energyMax'],
+                    "energy" => $row['energy'],
                     "options" => array(
                         "sfxDisabled" => false,
                         "musicDisabled" => false,
@@ -420,11 +355,11 @@ class Player {
                     // 'storageCapacityHash' => array(
                     //     "-2" => 500
                     // ),
-                    'userId' => $res['uid'],
+                    'userId' => $row['uid'],
                     'featureCredits' => "10",
                     'incrementalFriendChecks' => array(),
                     'friendRewards' => null,
-                    'seenFlags' => unserialize($res['seenFlags']), //tutorial flag
+                    'seenFlags' => unserialize($row['seenFlags']), //tutorial flag
                     'itemFlags' => array("giftcard" => ""),
                     'featureFrequency' => array(
                         "AvatarIndicatorLastInteraction" => 10,
@@ -447,8 +382,8 @@ class Player {
                         "lastLoaded" => strtotime(date("Y-m-d h:i:s"))
                     )
                 ), //TODO
-                "is_new" => $res["isNew"],
-                "firstDay" => $res["firstDay"],
+                "is_new" => $row["isNew"],
+                "firstDay" => $row["firstDay"],
                 "firstDayTimestamp" => 0,
                 "featureOptions"=> array(
                     "world_seasons" => array(
@@ -470,16 +405,18 @@ class Player {
     
 
     public function getAvatar(){
-        
-        $query = "SELECT value FROM useravatars WHERE uid = '" . $this->uid ."'";
-        $conn = $this->db->getDb();
+        $this->avatarData = null;
 
-        $result = $conn->query($query);
-
-        $res = $result->fetch_assoc();
-        
-
-        $this->avatarData = $res["value"] != null ? unserialize($res["value"]) : null;
+        if (is_numeric($this->uid)){
+            $conn = $this->db->getDb();
+            $stmt = $conn->prepare("SELECT value FROM useravatars WHERE uid = ?");
+            $stmt->bind_param("s", $this->uid);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            $this->avatarData = ($row["value"] != null) ? unserialize($row["value"]) : null;
+            $this->db->destroy();
+        }
 
         return $this->avatarData;
     }
@@ -585,15 +522,14 @@ class Player {
         }
         
         $this->worldData = $currWorld;
+        $objects = serialize($currWorld["objectsArray"]);
         
-        
+        // No need for further validation (Would have already failed)
         $conn = $this->db->getDb();
-        
-        $query = "UPDATE userworlds SET `objects` = '" . serialize($currWorld["objectsArray"]) . "', `sizeX` = ".$currWorld["sizeX"].", `sizeY` = ".$currWorld["sizeY"]." WHERE uid = '". $this->uid. "'";
-        
-        $conn->query($query);
-        
-        
+        $stmt = $conn->prepare("UPDATE userworlds SET objects = ?, sizeX = ?, sizeY = ? WHERE uid = ?");
+        $stmt->bind_param("siis", $objects, $currWorld["sizeX"], $currWorld["sizeY"], $this->uid);        
+        $stmt->execute();
+        $this->db->destroy();
     
         if ($newId > 0){
             return $newId;
@@ -603,23 +539,34 @@ class Player {
     }
 
     public function setAvatar($attribs){
-        $conn = $this->db->getDb();
-                
-        $query = "UPDATE useravatars SET `value` = '" . serialize($attribs) . "' WHERE uid = '". $this->uid. "'";
-        $conn->query($query);
-        
-        
+        if (is_numeric($this->uid) && is_array($attribs)){
+            $attribs = serialize($attribs);
+            $conn = $this->db->getDb();
+            $stmt = $conn->prepare("UPDATE useravatars SET value = ? WHERE uid = ?");
+            $stmt->bind_param("ss", $attribs, $this->uid);
+            $stmt->execute();
+            $this->db->destroy();
+        }
     }
 
     public function getPlayerDataForNeighbor(){
-        $conn = $this->db->getDb();
-        $query = "SELECT us.uid as uid, us.name as name, um.firstName as firstname, um.lastName as lastname FROM users AS us INNER JOIN usermeta AS um ON us.uid = um.uid WHERE us.uid NOT LIKE '{$this->uid}'";
-        // echo $query;
-        $result = $conn->query($query);
-        $res = $result->fetch_all(MYSQLI_ASSOC);
-        
-        return $res;
-        
+        $rows = [];
+
+        if (is_numeric($this->uid)){
+            $conn = $this->db->getDb();
+            $stmt = $conn->prepare("SELECT us.uid as uid, us.name as name, um.firstName as firstname, um.lastName as lastname FROM users AS us INNER JOIN usermeta AS um ON us.uid = um.uid WHERE us.uid <> ?");
+            $stmt->bind_param("s", $this->uid);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result){
+                $rows = $result->fetch_all(MYSQLI_ASSOC);
+            }
+            
+            $this->db->destroy();
+        }
+
+        return $rows;
     }
 
     public function getCurrentNeighbors(){
@@ -674,26 +621,29 @@ class Player {
     }
 
     public function getPlayerData($uid){
+        if (is_numeric($uid)){
+            $conn = $this->db->getDb();
+            $stmt = $conn->prepare("SELECT us.uid as uid, us.name as name, um.firstName as firstname, um.lastName as lastname FROM users AS us INNER JOIN usermeta AS um ON us.uid = um.uid WHERE us.uid = ?");
+            $stmt->bind_param("s", $uid);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            $this->db->destroy();
+            
+            // if the row's contents are invalid, loading SHOULD fail
+            return (object) [
+                "uid" => $row['uid'],
+                "name" => $row['name'],
+                "first_name" => $row['firstname'],
+                "last_name" => $row['lastname'],
+                "is_app_user" => true,
+                "valid" => true,
+                "allowed_restrictions" => false,
+                "pic_square" => "",
+                "pic_big" => ""
+            ];
+        }
 
-        $conn = $this->db->getDb();
-        $query = "SELECT us.uid as uid, us.name as name, um.firstName as firstname, um.lastName as lastname FROM users AS us INNER JOIN usermeta AS um ON us.uid = um.uid WHERE us.uid LIKE '{$uid}'";
-        // echo $query;
-        $result = $conn->query($query);
-        $res = $result->fetch_assoc();
-        
-        return (object) [
-            "uid" => $res['uid'],
-            "name" => $res['name'],
-            "first_name" => $res['firstname'],
-            "last_name" => $res['lastname'],
-            "is_app_user" => true,
-            "valid" => true,
-            "allowed_restrictions" => false,
-            "pic_square" => "",
-            "pic_big" => ""
-        ];
+        return (object) [];
     }
-
 }
-
-?>

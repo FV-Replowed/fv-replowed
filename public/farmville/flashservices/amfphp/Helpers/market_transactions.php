@@ -1,8 +1,10 @@
 <?php 
 require_once AMFPHP_ROOTPATH . "Helpers/globals.php";
 require_once AMFPHP_ROOTPATH . "Helpers/database.php";
+require_once AMFPHP_ROOTPATH . "Helpers/user_resources.php";
 require_once AMFPHP_ROOTPATH . "Helpers/general_functions.php";
 
+// TODO: adjust structure
 class MarketTransactions {
     private $uid = null;
     private $db = null;
@@ -19,6 +21,7 @@ class MarketTransactions {
                 break;
             case "harvest":
                 $this->harvestCrop($data);
+                break;
             case "place":
                 $this->buyItem($data);
                 break;
@@ -28,63 +31,51 @@ class MarketTransactions {
         }
     }
 
+    // TODO: improve accuracy
     public function sellItem(object $data){
-        global $db;
-
         $res = getItemByName($data->itemName, "db");
-
-        if ($res && $res["cost"]){
-            $conn = $db->getDb();
-            $sellCost = $res['cost'] * 0.05;
-            $query = "UPDATE usermeta SET `gold` = gold + " . $sellCost . " WHERE uid = '". $this->uid. "'";
-            $conn->query($query);
-            $db->destroy();
-        }
-    }
-
-    public function harvestCrop(object $data){
-        global $db;
         
-        $res = getItemByName($data->itemName, "db");
-
-        if ($res && $res["coinYield"]){
-            $conn = $db->getDb();
-            $query = "UPDATE usermeta SET `gold` = gold + " . $res['coinYield'] . ", xp = xp + ".$res['coinYield']." WHERE uid = '". $this->uid. "'";
-            $conn->query($query);
-            $db->destroy();
+        if ($res){
+            $saleValue = (int) ($res["cost"] ?? 0);
+            $saleValue = (int) ($saleValue * 0.05);
+            return UserResources::addGold($this->uid, $saleValue);
         }
+
+        return false;
     }
 
+    public function harvestCrop(object $data){        
+        $res = getItemByName($data->itemName, "db");
+        
+        if ($res){
+            $coinYield = (int) ($res["coinYield"] ?? 0);
+            return UserResources::addGold($this->uid, $coinYield);
+        }
+        
+        return false;
+    }
+
+    // TODO: add cash support
     public function buyItem(object $data){
-        global $db;
-        
         $res = getItemByName($data->itemName, "db");
-        $conn = $db->getDb();
-        if ($res && $res["cost"]){
-            //Calc xp gain
-            $buyXp = 0;
-            if ($res['plantXp']){
-                $buyXp = $res['plantXp'];
-            }else{
-                $buyXp = $res['cost'] * 0.01;
-            }
-            $query = "UPDATE usermeta SET `gold` = gold - " . $res["cost"] . ", xp = xp + ".$buyXp." WHERE uid = '". $this->uid. "'";
-            $conn->query($query);
-        }elseif ($res && $res["cash"]){
-            $buyXp = $res['cash'] * 100;
-            $query = "UPDATE usermeta SET `gold` = gold - " . $res["cost"] . ", xp = xp + ".$buyXp." WHERE uid = '". $this->uid. "'";
-            $conn->query($query);
+
+        if ($res){
+            $cost = (int) ($res["cost"] ?? 0);
+            $plantXp = (int) ($res["plantXp"] ?? 0);
+            $result1 = UserResources::removeGold($this->uid, $cost);
+            $result2 = userResources::addXp($this->uid, $plantXp);
+            return ($result1 && $result2);
         }
-        $db->destroy();
+
+        return false;
     }
 
     public function plowLand(){
-        global $db;
-        $conn = $db->getDb();
-        $query = "UPDATE usermeta SET `gold` = gold - 15, `xp` = xp + 1 WHERE uid = '". $this->uid. "'";
-        $conn->query($query);
-        $db->destroy();
+        $cost = 15;
+        $plowXp = 1;
+        $result1 = UserResources::removeGold($this->uid, $cost);
+        $result2 = UserResources::addXp($this->uid, $plowXp);
+
+        return ($result1 && $result2);
     }
 }
-
-
