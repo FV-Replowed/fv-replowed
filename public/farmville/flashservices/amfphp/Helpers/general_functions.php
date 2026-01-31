@@ -28,7 +28,7 @@
             $db->destroy();
         }
 
-        return $meta["meta_value"] ?? false;
+        return ($meta != null) ? $meta["meta_value"] : false;
     }
 
 
@@ -88,10 +88,10 @@
                 $stmt->bind_param("s", $itemName);
                 $stmt->execute();
                 $result = $stmt->get_result();
-                $item = $result->fetch_assoc() ?? [];
+                $item = $result->fetch_assoc();
                 $db->destroy();
 
-                return unserialize($item['data'] ?? null);
+                return unserialize($item["data"]);
             }
 
             $items_str = file_get_contents($_SERVER['DOCUMENT_ROOT'] . "/props/items.json");

@@ -413,8 +413,8 @@ class Player {
             $stmt->bind_param("s", $this->uid);
             $stmt->execute();
             $result = $stmt->get_result();
-            $row = $result->fetch_assoc() ?? [];
-            $this->avatarData = unserialize($row["value"] ?? null) ?? null;
+            $row = $result->fetch_assoc();
+            $this->avatarData = ($row["value"] != null) ? unserialize($row["value"]) : null;
             $this->db->destroy();
         }
 
