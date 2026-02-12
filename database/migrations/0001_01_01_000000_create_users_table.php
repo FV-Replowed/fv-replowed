@@ -68,6 +68,8 @@ return new class extends Migration
             $table->string('uid', 20);
             $table->string('meta_key', 255);
             $table->longText('meta_value');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
 
         Schema::create('userworlds', function (Blueprint $table) {

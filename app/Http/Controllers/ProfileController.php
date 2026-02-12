@@ -5,9 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\UserMeta;
+use App\Models\UserAvatar;
+use App\Models\UserWorld;
+use App\Models\PlayerMeta;
 
 class ProfileController extends Controller
 {
@@ -50,7 +55,29 @@ class ProfileController extends Controller
 
         Auth::logout();
 
-        $user->delete();
+        DB::transaction(function () use ($user) {
+            $neighborEntries = PlayerMeta::where('meta_key', 'like', '%_neighbors')
+            ->where('meta_value', 'like', '%' . $user->uid . '%')->get();
+
+            UserMeta::where('uid', '=', $user->uid)->delete();
+            UserAvatar::where('uid', '=', $user->uid)->delete();
+            UserWorld::where('uid', '=', $user->uid)->delete();
+            PlayerMeta::where('uid', '=', $user->uid)->delete();
+            
+            $neighborEntries->each(function (PlayerMeta $entry) use ($user) {
+                $neighbors = unserialize($entry->meta_value, ['allowed_classes' => false]);
+
+                if (!is_array($neighbors)) {
+                    return;
+                }
+
+                $neighbors = array_values(array_diff($neighbors, [(string) $user->uid]));
+                $entry->meta_value = serialize($neighbors);
+                $entry->save();
+            });
+
+            $user->delete();
+        });
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
