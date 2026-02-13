@@ -49,14 +49,14 @@ return new class extends Migration
             $table->string('uid', 20);
             $table->string('firstName', 50);
             $table->string('lastName', 50);
-            $table->integer('xp')->default(0);
-            $table->integer('cash')->default(15);
-            $table->integer('gold')->default(500);
-            $table->integer('energyMax')->default(100);
-            $table->integer('energy')->default(100);
+            $table->integer('xp');
+            $table->integer('cash');
+            $table->integer('gold');
+            $table->integer('energyMax');
+            $table->integer('energy');
             $table->text('seenFlags');
-            $table->boolean('isNew')->default(true);
-            $table->boolean('firstDay')->default(true);
+            $table->boolean('isNew');
+            $table->boolean('firstDay');
             $table->timestamps();
         });
 
