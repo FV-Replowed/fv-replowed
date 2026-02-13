@@ -1,41 +1,48 @@
-version: '3.8'
 services:
-    
-    # Application
-    fv-replowed:
-        image: kehayeah/fv-replowed:latest
-        working_dir: /var/www/html
-        volumes:
-            - fv-replowed:/var/www/html
-        ports:
-            - "8000:80"
-        depends_on:
-            - "database"
-    # Database
-    database:
-        image: mysql:8.0
-        volumes:
-            - dbdata:/var/lib/mysql
-        environment:
-            MYSQL_DATABASE: ${DB_DATABASE}
-            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-            MYSQL_PASSWORD: ${DB_PASSWORD}
-            MYSQL_USER: ${DB_USERNAME}
-        ports:
-            - "33061:3306"
-    # Database management
-    pma:
-        image: phpmyadmin:5.1
-        environment:
-            - PMA_ARBITRARY=1
-            - PMA_HOST=${DB_HOST}
-            - PMA_USER=${DB_USERNAME}
-            - PMA_PASSWORD=${DB_PASSWORD}
-            - PMA_PORT=${DB_PORT}
-        depends_on:
-            - database
-        ports:
-            - 8888:80
+  fv-replowed:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: fv-replowed:local
+    working_dir: /var/www/html
+    ports:
+      - "8000:80"
+    volumes:
+      - ./public/farmville/assets:/var/www/html/public/farmville/assets
+    depends_on:
+      - database
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: database
+      DB_PORT: 3306
+      DB_DATABASE: ${DB_DATABASE:-farmvilledb}
+      DB_USERNAME: ${DB_USERNAME:-fv_usr}
+      DB_PASSWORD: ${DB_PASSWORD:-fv_pass}
+
+  database:
+    image: mysql:8.0
+    volumes:
+      - dbdata:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-farmvilledb}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-fv_pass}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-fv_pass}
+      MYSQL_USER: ${DB_USERNAME:-fv_usr}
+    ports:
+      - "33061:3306"
+
+  flash-client:
+    build:
+      context: .
+      dockerfile: docker/flash/Dockerfile
+    depends_on:
+      - fv-replowed
+    environment:
+      GAME_URL: http://fv-replowed/game
+      SCREEN_WIDTH: 1280
+      SCREEN_HEIGHT: 720
+    ports:
+      - "6080:6080"
+
 volumes:
-    dbdata:
-    fv-replowed:
+  dbdata:

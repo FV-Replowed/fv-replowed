@@ -46,6 +46,9 @@ RUN npm install
 # Build frontend assets
 RUN npm run build
 
+# Ensure env exists for key generation
+RUN if [ ! -f .env ]; then cp .env.example .env; fi
+
 # Generate Key
 RUN php artisan key:generate
 

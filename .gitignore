@@ -1,8 +1,10 @@
 /.phpunit.cache
+/.cache
 /node_modules
 /public/build
 /public/hot
 /public/storage
+/public/farmville/assets
 /storage/*.key
 /storage/pail
 /vendor

@@ -20,6 +20,10 @@ class UserMeta extends Model
         'uid', 'firstName', 'lastName', 'xp', 'cash', 'gold', 'energyMax', 'energy', 'seenFlags', 'isNew', 'firstDay'
     ];
 
+    protected $attributes = [
+        'seenFlags' => 'a:1:{s:13:"ftue_complete";b:0;}',
+    ];
+
     // Assuming 'uid' is the foreign key for the user ID from the registration
 
     /**
