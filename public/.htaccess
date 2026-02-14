@@ -1,4 +1,9 @@
 <IfModule mod_rewrite.c>
+    <IfModule mod_mime.c>
+        AddType application/x-shockwave-flash .swf
+        AddType application/futuresplash .spl
+    </IfModule>
+
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
     </IfModule>
@@ -17,6 +22,13 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
+
+    # FarmVille assets live under assets/hashed/assets; rewrite missing direct paths.
+    RewriteCond %{REQUEST_URI} ^/farmville/assets/ [NC]
+    RewriteCond %{REQUEST_URI} !^/farmville/assets/hashed/assets/ [NC]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^farmville/assets/(.*)$ /farmville/assets/hashed/assets/$1 [L]
 
     # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d

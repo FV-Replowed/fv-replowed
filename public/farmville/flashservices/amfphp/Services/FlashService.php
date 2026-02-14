@@ -7,8 +7,13 @@ require_once AMFPHP_ROOTPATH . "Functions/FarmQuestService.php";
 require_once AMFPHP_ROOTPATH . "Functions/FBRequestService.php";
 require_once AMFPHP_ROOTPATH . "Functions/FriendListService.php";
 require_once AMFPHP_ROOTPATH . "Functions/FriendSetService.php";
+require_once AMFPHP_ROOTPATH . "Functions/FVV10AnniversaryBirthdayCardService.php";
 require_once AMFPHP_ROOTPATH . "Functions/LeaderboardService.php";
+require_once AMFPHP_ROOTPATH . "Functions/LonelyAnimalFriendSetService.php";
+require_once AMFPHP_ROOTPATH . "Functions/PresentService.php";
+require_once AMFPHP_ROOTPATH . "Functions/SNPermissionsService.php";
 require_once AMFPHP_ROOTPATH . "Functions/UserService.php";
+require_once AMFPHP_ROOTPATH . "Functions/WatchToEarnRewardGrantService.php";
 require_once AMFPHP_ROOTPATH . "Functions/WorldService.php";
 
 class FlashService {

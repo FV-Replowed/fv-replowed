@@ -16,6 +16,13 @@ Route::get('/game', function () {
     return view('game');
 })->middleware(['auth', 'verified'])->name('game');
 
+Route::get('/neighbors/pending', function () {
+    return response()->json([
+        'pendingNeighbors' => [],
+        'neighbors' => [],
+    ]);
+});
+
 Route::post('/download-file', [AssetsController::class, 'downloadAssets'])->name('download.file');
 Route::get('/download-progress', [AssetsController::class, 'getProgress'])->name('download.progress');
 Route::post('/extract-file', [AssetsController::class, 'extractAssets'])->name('extract.file');

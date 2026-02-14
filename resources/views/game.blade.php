@@ -2793,6 +2793,9 @@
                             }
                         }
                     </script>
+                    @php
+                        $embedSwf = 'FarmGame.855037.855026.swf';
+                    @endphp
                     <script>
                         var flashVars = {
                             "token": "2f0daceecd5afb8e59c89777513e844e92",
@@ -2951,7 +2954,7 @@
                             id: "flashapp",
                             name: "flashapp"
                         };
-                        swfobject.embedSWF("http://<?= $_SERVER['HTTP_HOST'] ?>/farmville/embeds/Flash/v855037.855026/FV_Preloader.swf", "flashContent",
+                        swfobject.embedSWF("http://<?= $_SERVER['HTTP_HOST'] ?>/farmville/embeds/Flash/v855037.855026/{{ $embedSwf }}", "flashContent",
                             "100%", "600", "10.0.0", "playerProductInstall.swf",
                             flashVars, params, attrs, swfCallback);
                     </script>

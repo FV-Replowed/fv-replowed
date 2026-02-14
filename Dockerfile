@@ -21,7 +21,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN a2enmod rewrite
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql zip
+RUN docker-php-ext-install pdo_mysql mysqli zip
 
 # Configure Apache DocumentRoot to point to Laravel's public directory
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public

@@ -1,4 +1,4 @@
-.PHONY: build run init migrate wait-db assets
+.PHONY: build run init migrate wait-db assets items
 
 UNAME_S := $(shell uname -s)
 WIN_CURDIR := $(shell pwd -W 2>/dev/null || pwd)
@@ -29,3 +29,12 @@ else
 	fi
 	./scripts/fetch-assets.sh
 endif
+
+items:
+	@if [ ! -f .cache/fv-assets/farmvilledb_trimmed.sql ]; then \
+		echo "Missing .cache/fv-assets/farmvilledb_trimmed.sql. Run: make assets"; \
+		exit 1; \
+	fi
+	docker compose -f docker-compose.yaml exec -T database sh -lc 'cat > /tmp/farmvilledb_trimmed.sql' < .cache/fv-assets/farmvilledb_trimmed.sql
+	docker compose -f docker-compose.yaml exec -T database sh -lc 'mariadb -uroot -p"$$MARIADB_ROOT_PASSWORD" farmvilledb < /tmp/farmvilledb_trimmed.sql'
+	@echo "Imported items SQL into farmvilledb."
