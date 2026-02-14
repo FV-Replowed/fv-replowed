@@ -1,4 +1,4 @@
-.PHONY: build run run-no-vnc init migrate wait-db assets items
+.PHONY: build no-vnc run init migrate wait-db assets items
 
 UNAME_S := $(shell uname -s)
 WIN_CURDIR := $(shell pwd -W 2>/dev/null || pwd)
@@ -7,11 +7,13 @@ WSL_CURDIR := $(shell wsl -d Ubuntu -- wslpath -a "$(WIN_CURDIR)" 2>/dev/null | 
 build:
 	docker compose -f docker-compose.yaml build
 
+no-vnc:
+	docker compose -f docker-compose.yaml build fv-replowed
+	docker compose -f docker-compose.yaml up -d database fv-replowed
+
 run:
 	docker compose -f docker-compose.yaml up -d
 
-run-no-vnc:
-	docker compose -f docker-compose.yaml up -d database fv-replowed
 
 wait-db:
 	docker compose -f docker-compose.yaml exec -T database sh -c 'until mysqladmin ping -h 127.0.0.1 -p"$$MYSQL_ROOT_PASSWORD" --silent; do sleep 1; done'
