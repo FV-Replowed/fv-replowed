@@ -1,0 +1,85 @@
+services:
+  fv-replowed:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: fv-replowed:local
+    working_dir: /var/www/html
+    ports:
+      - "8000:80"
+    volumes:
+      - ./public/farmville/assets:/var/www/html/public/farmville/assets
+    depends_on:
+      - database
+    environment:
+      APP_URL: ${APP_URL}
+      DB_CONNECTION: mariadb
+      DB_HOST: database
+      DB_PORT: 3306
+      DB_DATABASE: ${DB_DATABASE:-farmvilledb}
+      DB_USERNAME: ${DB_USERNAME:-fv_usr}
+      DB_PASSWORD: ${DB_PASSWORD:-fv_pass}
+    networks:
+      default:
+        aliases:
+          - www.farmville.com
+          - farmville.com
+          - static.farmville.com
+          - static-0.farmville.com
+          - static-1.farmville.com
+          - static-2.farmville.com
+          - static-3.farmville.com
+          - fb-tc-0.farmville.com
+          - fb-tc-1.farmville.com
+          - fb-tc-2.farmville.com
+          - fb-tc-3.farmville.com
+          - fv-art-00.farmville.com
+          - farmville.zgncdn.com
+          - static.farmville.zgncdn.com
+          - static-0.farmville.zgncdn.com
+          - static-1.farmville.zgncdn.com
+          - static-2.farmville.zgncdn.com
+          - static-3.farmville.zgncdn.com
+          - farmville-s.assets.zgncdn.com
+          - farmville-s.assets1.zgncdn.com
+          - farmville-s.assets2.zgncdn.com
+          - farmville-s.assets3.zgncdn.com
+          - farm.zgncdn.com
+          - farm-0.zgncdn.com
+          - farm-1.zgncdn.com
+          - farm-2.zgncdn.com
+          - farm-3.zgncdn.com
+          - zcache.zgncdn.com
+          - zynga-a.akamaihd.net
+          - zynga1-a.akamaihd.net
+          - zynga2-a.akamaihd.net
+          - zynga3-a.akamaihd.net
+          - zynga4-a.akamaihd.net
+
+  database:
+    image: mariadb:10.11
+    volumes:
+      - dbdata:/var/lib/mysql
+    environment:
+      MARIADB_DATABASE: ${DB_DATABASE:-farmvilledb}
+      MARIADB_ROOT_PASSWORD: ${DB_PASSWORD:-fv_pass}
+      MARIADB_PASSWORD: ${DB_PASSWORD:-fv_pass}
+      MARIADB_USER: ${DB_USERNAME:-fv_usr}
+    ports:
+      - "33061:3306"
+
+  flash-client:
+    build:
+      context: .
+      dockerfile: docker/flash/Dockerfile
+    depends_on:
+      - fv-replowed
+    environment:
+      GAME_URL: http://www.farmville.com/game
+      SCREEN_WIDTH: 1280
+      SCREEN_HEIGHT: 720
+    ports:
+      - "6080:6080"
+
+volumes:
+  dbdata:

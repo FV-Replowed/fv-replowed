@@ -16,6 +16,8 @@
 /public/build
 /public/hot
 /public/storage
+/public/farmville/assets/
+/.cache/
 /storage/*.key
 /storage/pail
 /vendor

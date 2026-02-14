@@ -93,8 +93,8 @@ class Amfphp_Core_Config {
         $this->sharedConfig = array();
         $this->disabledPlugins = array();
         
-        //logging enabled
-        //$this->disabledPlugins[] = 'AmfphpLogger';
+        // Disable amfphp logger (writes to amfphplog.log and can fatal on permissions)
+        $this->disabledPlugins[] = 'AmfphpLogger';
         //$this->disabledPlugins[] = 'AmfphpErrorHandler';
  
         //AmfphpDummy serves the default gateway page

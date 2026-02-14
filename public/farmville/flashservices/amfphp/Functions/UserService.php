@@ -72,6 +72,46 @@ class UserService{
         return $data;
     }
 
+    public static function resetSystemNotifications($player, $request){
+        $data["data"] = array(
+            "systemNotifications" => true,
+            "dynamicSystemNotifications" => true
+        );
+        return $data;
+    }
+
+    public static function r2InterstitialPostInit($player, $request){
+        $data["data"] = array(
+            "showInterstitial" => false
+        );
+        return $data;
+    }
+
+    public static function incrementActionCount($player, $request){
+        $data["data"] = true;
+        return $data;
+    }
+
+    public static function updateFeatureFrequencyWithBackoff($player, $request){
+        $data["data"] = true;
+        return $data;
+    }
+
+    public static function updateFeatureFrequencyTimestamp($player, $request){
+        $data["data"] = true;
+        return $data;
+    }
+
+    public static function resetActionCount($player, $request){
+        $data["data"] = true;
+        return $data;
+    }
+
+    public static function setItemFlag($player, $request){
+        $data["data"] = true;
+        return $data;
+    }
+
     public static function getBalance(){
         $data["data"] = array(
             "gold" => 100000,
@@ -93,31 +133,27 @@ class UserService{
 
     public static function setSeenFlag($player, $request){
         global $db;
-        $uid = $player->getUid();
+        // Let's get our current seenFlags
+        $query = "SELECT seenFlags FROM usermeta WHERE uid = '". $player->getUid(). "'";
 
-        if (is_numeric($uid)){            
-            // Let's get our current seenFlags
-            $conn = $db->getDb();
-            $stmt = $conn->prepare("SELECT seenFlags FROM usermeta WHERE uid = ?");
-            $stmt->bind_param("s", $uid);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $row = $result->fetch_assoc();
-            
-            // Unserialize it
-            $flags = unserialize($row["seenFlags"]);
+        $conn = $db->getDb();
 
-            // Extract the actual flag from the request
-            $toAdd = $request->params[0];
+        $result = $conn->query($query);
 
-            // Add the next one
-            $flags[$toAdd] = true;
-            $flags = serialize($flags);
-            $stmt = $conn->prepare("UPDATE usermeta SET seenFlags = ? WHERE uid = ?");
-            $stmt->bind_param("ss", $flags, $uid);
-            $stmt->execute();
-            $db->destroy();
-        }
+        $res = $result->fetch_assoc();
+
+        // Unserialize it
+        $flags = unserialize($res['seenFlags']);
+
+        // Extract the actual flag from the request
+        $toAdd = $request->params[0];
+
+        // Add the next one
+        $flags[$toAdd] = true;
+        
+        $query = "UPDATE usermeta SET `seenFlags` = '" . serialize($flags) . "' WHERE uid = '". $player->getUid(). "'";
+
+        $conn->query($query);
 
         return [];
     }

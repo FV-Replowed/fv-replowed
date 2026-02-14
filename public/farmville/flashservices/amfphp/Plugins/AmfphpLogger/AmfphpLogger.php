@@ -43,7 +43,15 @@ class AmfphpLogger {
      * @throws Amfphp_Core_Exception
      */
     public static function logMessage($message) {
-        $fh = fopen(self::LOG_FILE_PATH, 'a');
+        // Prefer a stable absolute path to avoid CWD/permission issues.
+        $logPath = defined('AMFPHP_ROOTPATH')
+            ? AMFPHP_ROOTPATH . '../amfphplog.log'
+            : dirname(__FILE__) . '/../../amfphplog.log';
+        $logDir = dirname($logPath);
+        if (!is_dir($logDir)) {
+            @mkdir($logDir, 0775, true);
+        }
+        $fh = fopen($logPath, 'a');
         if (!$fh) {
             throw new Amfphp_Core_Exception("couldn't open log file for writing");
         }

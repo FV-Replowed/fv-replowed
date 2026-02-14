@@ -137,7 +137,21 @@ class Amfphp_Core_Common_ServiceRouter {
      *
      */
     public function executeServiceCall($serviceName, $methodName, array $parameters) {
-        $unfilteredServiceObject = $this->getServiceObject($serviceName);
+        $amf_debug = file_exists("/tmp/amf_debug");
+        if ($amf_debug) {
+            @file_put_contents("/tmp/amf_router.log", "service={$serviceName} method={$methodName} params=" . count($parameters) . "\n", FILE_APPEND);
+        }
+        try {
+            $unfilteredServiceObject = $this->getServiceObject($serviceName);
+            if ($amf_debug) {
+                @file_put_contents("/tmp/amf_router.log", "serviceObject ok\n", FILE_APPEND);
+            }
+        } catch (Exception $e) {
+            if ($amf_debug) {
+                @file_put_contents("/tmp/amf_router.log", "serviceObject error: " . $e->getMessage() . "\n", FILE_APPEND);
+            }
+            throw $e;
+        }
         $serviceObject = Amfphp_Core_FilterManager::getInstance()->callFilters(self::FILTER_SERVICE_OBJECT, $unfilteredServiceObject, $serviceName, $methodName, $parameters);
 
         $isStaticMethod = false;
@@ -147,7 +161,13 @@ class Amfphp_Core_Common_ServiceRouter {
         }else if (method_exists($serviceName, $methodName)) {
             $isStaticMethod = true;
         }else{
+            if ($amf_debug) {
+                @file_put_contents("/tmp/amf_router.log", "method not found\n", FILE_APPEND);
+            }
             throw new Amfphp_Core_Exception("method $methodName not found on $serviceName object ");
+        }
+        if ($amf_debug) {
+            @file_put_contents("/tmp/amf_router.log", "method ok isStatic=" . ($isStaticMethod ? "1" : "0") . "\n", FILE_APPEND);
         }
         
         if(substr($methodName, 0, 1) == '_'){
