@@ -75,7 +75,7 @@ services:
     depends_on:
       - fv-replowed
     environment:
-      GAME_URL: http://www.farmville.com/game
+      GAME_URL: http://www.farmville.com/dashboard
       SCREEN_WIDTH: 1280
       SCREEN_HEIGHT: 720
     ports:

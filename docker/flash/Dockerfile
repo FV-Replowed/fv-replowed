@@ -3,7 +3,7 @@ FROM debian:bookworm-slim
 ENV DEBIAN_FRONTEND=noninteractive
 ENV SCREEN_WIDTH=1280
 ENV SCREEN_HEIGHT=720
-ENV GAME_URL=http://fv-replowed/game
+ENV GAME_URL=http://fv-replowed/dashboard
 ENV MOZ_PLUGIN_PATH=/usr/lib/mozilla/plugins
 
 RUN apt-get update && apt-get install -y \

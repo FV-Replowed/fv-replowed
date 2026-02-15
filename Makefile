@@ -1,4 +1,4 @@
-.PHONY: build no-vnc run init migrate assets items
+.PHONY: build no-vnc run init migrate assets items db-wait
 
 UNAME_S := $(shell uname -s)
 WIN_CURDIR := $(shell pwd -W 2>/dev/null || pwd)
@@ -14,7 +14,20 @@ no-vnc:
 run:
 	docker compose -f docker-compose.yaml up -d
 
-migrate:
+db-wait:
+	@echo "Waiting for database to be ready..."
+	@i=0; \
+	until docker compose -f docker-compose.yaml exec -T database sh -lc 'MYSQL_PWD="$$MARIADB_ROOT_PASSWORD" mariadb -uroot -e "SELECT 1" >/dev/null 2>&1'; do \
+		i=$$((i+1)); \
+		if [ $$i -ge 30 ]; then \
+			echo "Database is not ready after $${i} attempts."; \
+			echo "Ensure the database container is running: make run"; \
+			exit 1; \
+		fi; \
+		sleep 2; \
+	done
+
+migrate: db-wait
 	docker compose exec fv-replowed php artisan migrate --seed
 
 init: build run migrate
