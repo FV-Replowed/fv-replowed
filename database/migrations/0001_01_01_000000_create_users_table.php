@@ -80,8 +80,8 @@ return new class extends Migration
             $table->string('type', 20);
             $table->integer('sizeX')->default($classicSize);
             $table->integer('sizeY')->default($classicSize);
-            $table->text('objects');
-            $table->text('messageManager');
+            $table->longText('objects');
+            $table->longText('messageManager');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
