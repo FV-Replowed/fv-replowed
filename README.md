@@ -41,6 +41,7 @@ A revival project for the world's finest Flash farming game
 * kehayeah: PHP work and reverse engineering
 * puccamite.tech: Dehasher development
 * rabbetsbigday: Additional technical advising
+* jpfleischer: Dockerization
 
 ## Docker
 
