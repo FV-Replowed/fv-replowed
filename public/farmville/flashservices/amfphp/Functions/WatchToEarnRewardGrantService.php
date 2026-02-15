@@ -9,8 +9,13 @@ class WatchToEarnRewardGrantService{
     }
 
     public static function getUserZid($playerObj, $request){
-        $data["data"] = $playerObj->getUid();
-        return $data;
+        $zid = (string) $playerObj->getUid();
+        return array(
+            "success" => true,
+            "zid" => $zid,
+            "data" => array(
+                "zid" => $zid
+            )
+        );
     }
 }
-
