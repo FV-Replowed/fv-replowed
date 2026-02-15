@@ -25,13 +25,8 @@ init: build run migrate
 
 assets:
 ifeq ($(findstring MINGW,$(UNAME_S)),MINGW)
-	test -f scripts/fetch-assets.sh || (echo "scripts/fetch-assets.sh is local-only; create it before running assets." && exit 1)
 	wsl -d Ubuntu -- bash -lc "cd \"$(WSL_CURDIR)\" && ./scripts/fetch-assets.sh"
 else
-	@if [ ! -f ./scripts/fetch-assets.sh ]; then \
-		echo "scripts/fetch-assets.sh is local-only; create it before running assets."; \
-		exit 1; \
-	fi
 	./scripts/fetch-assets.sh
 endif
 
