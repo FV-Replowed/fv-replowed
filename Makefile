@@ -1,4 +1,4 @@
-.PHONY: build no-vnc run init migrate wait-db assets items
+.PHONY: build no-vnc run init migrate assets items
 
 UNAME_S := $(shell uname -s)
 WIN_CURDIR := $(shell pwd -W 2>/dev/null || pwd)
@@ -14,12 +14,8 @@ no-vnc:
 run:
 	docker compose -f docker-compose.yaml up -d
 
-
-wait-db:
-	docker compose -f docker-compose.yaml exec -T database sh -c 'until mysqladmin ping -h 127.0.0.1 -p"$$MYSQL_ROOT_PASSWORD" --silent; do sleep 1; done'
-
-migrate: wait-db
-	docker compose -f docker-compose.yaml exec -T fv-replowed php artisan migrate --seed
+migrate:
+	docker compose exec fv-replowed php artisan migrate --seed
 
 init: build run migrate
 
