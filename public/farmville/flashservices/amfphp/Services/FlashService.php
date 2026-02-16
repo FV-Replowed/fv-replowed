@@ -23,10 +23,10 @@ class FlashService {
 
         $player = null;
         $market = null;
-        $amf_debug = file_exists("/tmp/amf_debug");
+        $amf_debug = amfphp_debug_enabled();
         if ($amf_debug) {
             $count = is_array($reqData) ? count($reqData) : (is_object($reqData) ? count((array)$reqData) : 0);
-            @file_put_contents("/tmp/amf_calls.log", "dispatchBatch start count={$count}\n", FILE_APPEND);
+            @file_put_contents(amfphp_debug_log_path('amf_calls.log'), "dispatchBatch start count={$count}\n", FILE_APPEND);
         }
         // Are we in init? if so, get masterId. If not, the id is in zy_user
         // We initialize the player object with our id.
@@ -78,21 +78,21 @@ class FlashService {
             try{
                 $fn_details = explode(".", $requ->functionName);
                 if ($amf_debug) {
-                    @file_put_contents("/tmp/amf_calls.log", "AMF call: {$requ->functionName}\n", FILE_APPEND);
+                    @file_put_contents(amfphp_debug_log_path('amf_calls.log'), "AMF call: {$requ->functionName}\n", FILE_APPEND);
                 }
 
                 if (method_exists($fn_details[0], $fn_details[1])){
                     $data[$key] = array_merge($data[$key], call_user_func(array($fn_details[0], $fn_details[1]), $player, $requ, $market));
                 } else {
                     if ($amf_debug) {
-                        @file_put_contents("/tmp/amf_missing.log", "Missing AMF method: {$requ->functionName}\n", FILE_APPEND);
+                        @file_put_contents(amfphp_debug_log_path('amf_missing.log'), "Missing AMF method: {$requ->functionName}\n", FILE_APPEND);
                     }
                 }
             }catch (Exception $e){
                 if ($amf_debug) {
                     $msg = "AMF exception: " . $e->getMessage() . " in " . $e->getFile() . ":" . $e->getLine() . "\n";
                     $msg .= $e->getTraceAsString() . "\n";
-                    @file_put_contents("/tmp/amf_missing.log", $msg, FILE_APPEND);
+                    @file_put_contents(amfphp_debug_log_path('amf_missing.log'), $msg, FILE_APPEND);
                 }
                 // Do nothing
                 //var_dump($e);

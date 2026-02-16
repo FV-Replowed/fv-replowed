@@ -13,8 +13,8 @@
  * @package Amfphp
 *  */
 require_once dirname(__FILE__) . '/ClassLoader.php';
-if (file_exists("/tmp/amf_debug")) {
-    @file_put_contents("/tmp/amf_index.log", "index start\n", FILE_APPEND);
+if (amfphp_debug_enabled()) {
+    @file_put_contents(amfphp_debug_log_path('amf_index.log'), "index start\n", FILE_APPEND);
 }
 
 /* 
@@ -30,12 +30,12 @@ $gateway = Amfphp_Core_HttpRequestGatewayFactory::createGateway();
 //chdir(dirname(__FILE__) . '/Services');
 
 $gateway->service();
-if (file_exists("/tmp/amf_debug")) {
-    @file_put_contents("/tmp/amf_index.log", "service done\n", FILE_APPEND);
+if (amfphp_debug_enabled()) {
+    @file_put_contents(amfphp_debug_log_path('amf_index.log'), "service done\n", FILE_APPEND);
 }
 $gateway->output();
-if (file_exists("/tmp/amf_debug")) {
-    @file_put_contents("/tmp/amf_index.log", "output done\n", FILE_APPEND);
+if (amfphp_debug_enabled()) {
+    @file_put_contents(amfphp_debug_log_path('amf_index.log'), "output done\n", FILE_APPEND);
 }
 
 
