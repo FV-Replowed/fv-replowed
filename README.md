@@ -41,3 +41,14 @@ A revival project for the world's finest Flash farming game
 * kehayeah: PHP work and reverse engineering
 * puccamite.tech: Dehasher development
 * rabbetsbigday: Additional technical advising
+* jpfleischer: Dockerization
+
+## Docker
+
+```bash
+make assets # if it fails, try sudo make assets
+make build # or make no-vnc for headless machines
+make run
+make migrate
+make items
+```
