@@ -1,12 +1,7 @@
 <?php 
 
-// database credentials (match .env.example / Laravel DB_* vars)
-$dbHost = getenv('DB_HOST') ?: '127.0.0.1';
-$dbUser = getenv('DB_USERNAME') ?: 'root';
-$dbPass = getenv('DB_PASSWORD') ?: '';
-$dbName = getenv('DB_DATABASE') ?: 'laratests';
-
-define('DB_SERVER', $dbHost);
-define('DB_USERNAME', $dbUser);
-define('DB_PASSWORD', $dbPass);
-define('DB_NAME', $dbName);
+// database credentials (match Laravel DB_* vars)
+define('DB_SERVER', getenv('DB_HOST') ?: '127.0.0.1');
+define('DB_USERNAME', getenv('DB_USERNAME') ?: 'root');
+define('DB_PASSWORD', getenv('DB_PASSWORD') ?: '');
+define('DB_NAME', getenv('DB_DATABASE') ?: 'laratests');
