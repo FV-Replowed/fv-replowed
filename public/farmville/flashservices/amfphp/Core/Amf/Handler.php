@@ -133,6 +133,9 @@ class Amfphp_Core_Amf_Handler implements Amfphp_Core_Common_IDeserializer, Amfph
      * @return Amfphp_Core_Amf_Message the response Message for the request
      */
     protected function handleRequestMessage(Amfphp_Core_Amf_Message $requestMessage, Amfphp_Core_Common_ServiceRouter $serviceRouter) {
+        if (amfphp_debug_enabled()) {
+            @file_put_contents(amfphp_debug_log_path('amf_handler.log'), "handleRequestMessage target={$requestMessage->targetUri}\n", FILE_APPEND);
+        }
         $filterManager = Amfphp_Core_FilterManager::getInstance();
         $fromFilters = $filterManager->callFilters(self::FILTER_AMF_REQUEST_MESSAGE_HANDLER, null, $requestMessage);
         if ($fromFilters) {
@@ -159,6 +162,9 @@ class Amfphp_Core_Amf_Handler implements Amfphp_Core_Common_IDeserializer, Amfph
      * @return mixed
      */
     public function handleDeserializedRequest($deserializedRequest, Amfphp_Core_Common_ServiceRouter $serviceRouter) {
+        if (amfphp_debug_enabled()) {
+            @file_put_contents(amfphp_debug_log_path('amf_handler.log'), "handleDeserializedRequest\n", FILE_APPEND);
+        }
         self::$requestPacket = $deserializedRequest;
         self::$responsePacket = new Amfphp_Core_Amf_Packet();
         $numHeaders = count(self::$requestPacket->headers);

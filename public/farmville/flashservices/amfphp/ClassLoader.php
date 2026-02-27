@@ -21,6 +21,46 @@
 define( 'AMFPHP_ROOTPATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 define( 'AMFPHP_VERSION', '2.2.2');
 
+if (!function_exists('amfphp_debug_log_dir')) {
+    function amfphp_debug_log_dir() {
+        $basePath = null;
+        if (class_exists('AmfphpLogger', false)) {
+            $basePath = AmfphpLogger::LOG_FILE_PATH;
+        } else {
+            $loggerPath = AMFPHP_ROOTPATH . 'Plugins/AmfphpLogger/AmfphpLogger.php';
+            if (file_exists($loggerPath)) {
+                require_once $loggerPath;
+                if (class_exists('AmfphpLogger', false)) {
+                    $basePath = AmfphpLogger::LOG_FILE_PATH;
+                }
+            }
+        }
+        if ($basePath === null) {
+            $basePath = 'amfphplog.log';
+        }
+        $dir = dirname($basePath);
+        if ($dir === '.' || $dir === DIRECTORY_SEPARATOR) {
+            return '.';
+        }
+        return rtrim($dir, '/\\');
+    }
+
+    function amfphp_debug_log_path($filename) {
+        $dir = amfphp_debug_log_dir();
+        if ($dir === '.') {
+            return $filename;
+        }
+        return $dir . DIRECTORY_SEPARATOR . $filename;
+    }
+
+    function amfphp_debug_enabled() {
+        if (file_exists(amfphp_debug_log_path('amf_debug'))) {
+            return true;
+        }
+        return file_exists('/tmp/amf_debug');
+    }
+}
+
 //core/common
 require_once AMFPHP_ROOTPATH . 'Core/Common/ClassFindInfo.php';
 require_once AMFPHP_ROOTPATH . 'Core/Common/IDeserializer.php';

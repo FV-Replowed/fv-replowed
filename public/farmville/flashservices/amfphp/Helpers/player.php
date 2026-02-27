@@ -526,8 +526,8 @@ class Player {
         
         // No need for further validation (Would have already failed)
         $conn = $this->db->getDb();
-        $stmt = $conn->prepare("UPDATE userworlds SET objects = ?, sizeX = ?, sizeY = ? WHERE uid = ?");
-        $stmt->bind_param("siis", $objects, $currWorld["sizeX"], $currWorld["sizeY"], $this->uid);        
+        $stmt = $conn->prepare("UPDATE userworlds SET objects = ?, sizeX = ?, sizeY = ? WHERE uid = ? AND type = ?");
+        $stmt->bind_param("siiss", $objects, $currWorld["sizeX"], $currWorld["sizeY"], $this->uid, $currentWorldType);
         $stmt->execute();
         $this->db->destroy();
     
