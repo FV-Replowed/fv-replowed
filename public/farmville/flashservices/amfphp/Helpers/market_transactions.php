@@ -64,7 +64,37 @@ class MarketTransactions {
             $plantXp = (int) ($res["plantXp"] ?? 0);
             $result1 = UserResources::removeGold($this->uid, $cost);
             $result2 = userResources::addXp($this->uid, $plantXp);
-            return ($result1 && $result2);
+            $result = ($result1 && $result2);
+
+            if ($result && ($res["type"] ?? "") === "change_farm" && ($res["subtype"] ?? "") === "expand_farm") {
+                $newSize = 0;
+                if (isset($res["squares"])) {
+                    $newSize = (int) $res["squares"];
+                } else if (isset($res["size"])) {
+                    $newSize = ((int) $res["size"] * 4) + 2;
+                }
+
+                if ($newSize > 0) {
+                    $currentWorldType = get_meta($this->uid, "currentWorldType") ?: "farm";
+                    $conn = $this->db->getDb();
+
+                    $stmt = $conn->prepare("SELECT sizeX FROM userworlds WHERE uid = ? AND type = ?");
+                    $stmt->bind_param("ss", $this->uid, $currentWorldType);
+                    $stmt->execute();
+                    $resultRow = $stmt->get_result()->fetch_assoc();
+                    $currentSize = $resultRow ? (int) $resultRow["sizeX"] : 0;
+
+                    if ($newSize > $currentSize) {
+                        $stmt = $conn->prepare("UPDATE userworlds SET sizeX = ?, sizeY = ? WHERE uid = ? AND type = ?");
+                        $stmt->bind_param("iiss", $newSize, $newSize, $this->uid, $currentWorldType);
+                        $stmt->execute();
+                    }
+
+                    $this->db->destroy();
+                }
+            }
+
+            return $result;
         }
 
         return false;
