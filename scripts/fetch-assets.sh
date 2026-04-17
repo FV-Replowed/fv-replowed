@@ -12,8 +12,8 @@ TOOLBAR_ICON_REL="hashed/assets/decorations/toolbar32x32.png"
 TOOLBAR_ICON_PATH="$ASSETS_DIR/$TOOLBAR_ICON_REL"
 TOOLBAR_ICON_CACHE="$CACHE_DIR/toolbar32x32.png"
 
-ASSET_LINK_BASE="https://farmville.guildedsin.com/all-any/assets"
-SUPPLEMENTS_LINK_BASE="https://farmville.guildedsin.com/all-any/supplements"
+ASSET_LINK_BASE="https://mirror.farmplay.win"
+SUPPLEMENTS_LINK_BASE="https://mirror.farmplay.win"
 DEHASHER_LINK_BASE="https://github.com/PuccamiteTech/FVDehasher/releases/download/1.02-SNAPSHOT"
 
 DEHASHER_LINK_FILE="ubuntu-build.zip"
