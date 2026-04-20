@@ -43,7 +43,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 ARG BASILISK_LINK_BASE=https://dl.basilisk-browser.org
-ARG BASILISK_LINK_FILE=basilisk-20260122233106.linux-x86_64-gtk3.tar.xz
+ARG BASILISK_LINK_FILE=basilisk-20260415151706.linux-x86_64-gtk3.tar.xz
 
 ARG FLASH_LINK_BASE=https://github.com/darktohka/clean-flash-builds/releases/download/v1.7
 ARG FLASH_LINK_FILE=flash_player_patched_npapi_linux.x86_64.tar.gz
