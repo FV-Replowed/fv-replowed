@@ -52,3 +52,11 @@ make run
 make migrate
 make items
 ```
+
+but the chinese flash debug page is a godsend, i download the NPAPI one https://www.flash.cn/support/debug-downloads
+and once i use that in Pale Moon, the  ~/AppData/Roaming/Macromedia/Flash Player/Logs/flashlog.txt is so helpful here.
+
+$ cat ~/mm.cfg
+ErrorReportingEnable=1
+TraceOutputFileEnable=1
+TraceOutputFileName=C:\Users\<whatever your username is>\AppData\Roaming\Macromedia\Flash Player\Logs\flashlog.txt
