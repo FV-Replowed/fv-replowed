@@ -13,6 +13,9 @@
  * @package Amfphp
 *  */
 require_once dirname(__FILE__) . '/ClassLoader.php';
+if (amfphp_debug_enabled()) {
+    @file_put_contents(amfphp_debug_log_path('amf_index.log'), "index start\n", FILE_APPEND);
+}
 
 /* 
  * main entry point (gateway) for service calls. instanciates the gateway class and uses it to handle the call.
@@ -27,7 +30,13 @@ $gateway = Amfphp_Core_HttpRequestGatewayFactory::createGateway();
 //chdir(dirname(__FILE__) . '/Services');
 
 $gateway->service();
+if (amfphp_debug_enabled()) {
+    @file_put_contents(amfphp_debug_log_path('amf_index.log'), "service done\n", FILE_APPEND);
+}
 $gateway->output();
+if (amfphp_debug_enabled()) {
+    @file_put_contents(amfphp_debug_log_path('amf_index.log'), "output done\n", FILE_APPEND);
+}
 
 
 ?>

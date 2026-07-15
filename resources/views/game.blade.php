@@ -3545,7 +3545,7 @@
                             <!-- SESSION HEADER -->
                             <div id="header" style="width: 850px; margin-top: 50px;">
                                 <div id="session" style="float: right; font-size: 14px;">
-                                    <p style="display:inline">Welcome <b>{{ auth()->user()->load('userMeta')->userMeta->firstName }}</b>! {{ auth()->user()->load('userMeta')->userMeta->xp }} xp (<a href="/">Log Out</a>)</p>
+                                    <p style="display:inline">Welcome <b>{{ auth()->user()->load('userMeta')->userMeta->firstName }}</b>! {{ auth()->user()->load('userMeta')->userMeta->xp }} xp (UID: {{ auth()->user()->uid }})</p>
                                 </div>
                             </div>
                             <br>

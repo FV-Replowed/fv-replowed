@@ -14,4 +14,9 @@ class LeaderboardService{
 
         return $data;
     }
+
+    public static function getBatchFriendLists($playerObj, $request){
+        $data["data"] = array();
+        return $data;
+    }
 }

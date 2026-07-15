@@ -526,8 +526,8 @@ class Player {
         
         // No need for further validation (Would have already failed)
         $conn = $this->db->getDb();
-        $stmt = $conn->prepare("UPDATE userworlds SET objects = ?, sizeX = ?, sizeY = ? WHERE uid = ?");
-        $stmt->bind_param("siis", $objects, $currWorld["sizeX"], $currWorld["sizeY"], $this->uid);        
+        $stmt = $conn->prepare("UPDATE userworlds SET objects = ?, sizeX = ?, sizeY = ? WHERE uid = ? AND type = ?");
+        $stmt->bind_param("siiss", $objects, $currWorld["sizeX"], $currWorld["sizeY"], $this->uid, $currentWorldType);
         $stmt->execute();
         $this->db->destroy();
     
@@ -623,7 +623,7 @@ class Player {
     public function getPlayerData($uid){
         if (is_numeric($uid)){
             $conn = $this->db->getDb();
-            $stmt = $conn->prepare("SELECT us.uid as uid, us.name as name, um.firstName as firstname, um.lastName as lastname FROM users AS us INNER JOIN usermeta AS um ON us.uid = um.uid WHERE us.uid = ?");
+            $stmt = $conn->prepare("SELECT us.uid AS uid, us.name AS name, um.firstName AS firstname, um.lastName AS lastname, um.xp AS xp, ua.value AS avatar FROM users AS us INNER JOIN usermeta AS um ON us.uid = um.uid INNER JOIN useravatars AS ua ON us.uid = ua.uid WHERE us.uid = ?");
             $stmt->bind_param("s", $uid);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -636,6 +636,8 @@ class Player {
                 "name" => $row['name'],
                 "first_name" => $row['firstname'],
                 "last_name" => $row['lastname'],
+                "xp" => $row['xp'],
+                "avatar" => unserialize($row['avatar']),
                 "is_app_user" => true,
                 "valid" => true,
                 "allowed_restrictions" => false,

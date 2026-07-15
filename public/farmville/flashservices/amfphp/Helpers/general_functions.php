@@ -146,7 +146,7 @@
     function createWorldByType($uid, $type = "farm" ){
         global $db;
 
-        $size = 48; // once expansions are fixed, the schema default should be used
+        $size = 50; // matches the schema default
         $messageManager = "";
 
         // Unix timestamp in milliseconds

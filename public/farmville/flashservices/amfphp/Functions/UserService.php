@@ -72,6 +72,46 @@ class UserService{
         return $data;
     }
 
+    public static function resetSystemNotifications($player, $request){
+        $data["data"] = array(
+            "systemNotifications" => true,
+            "dynamicSystemNotifications" => true
+        );
+        return $data;
+    }
+
+    public static function r2InterstitialPostInit($player, $request){
+        $data["data"] = array(
+            "showInterstitial" => false
+        );
+        return $data;
+    }
+
+    public static function incrementActionCount($player, $request){
+        $data["data"] = true;
+        return $data;
+    }
+
+    public static function updateFeatureFrequencyWithBackoff($player, $request){
+        $data["data"] = true;
+        return $data;
+    }
+
+    public static function updateFeatureFrequencyTimestamp($player, $request){
+        $data["data"] = true;
+        return $data;
+    }
+
+    public static function resetActionCount($player, $request){
+        $data["data"] = true;
+        return $data;
+    }
+
+    public static function setItemFlag($player, $request){
+        $data["data"] = true;
+        return $data;
+    }
+
     public static function getBalance(){
         $data["data"] = array(
             "gold" => 100000,
@@ -118,7 +158,6 @@ class UserService{
             $stmt->execute();
             $db->destroy();
         }
-
         return [];
     }
 }
